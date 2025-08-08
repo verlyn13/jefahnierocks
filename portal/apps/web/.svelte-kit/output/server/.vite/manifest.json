@@ -17,9 +17,16 @@
     "isEntry": true,
     "imports": [
       "_index2.js",
+      "_state.svelte.js",
       "_exports.js",
       "_index.js"
     ]
+  },
+  "../../node_modules/.pnpm/@sveltejs+kit@2.27.3_@sveltejs+vite-plugin-svelte@5.1.1_svelte@5.38.0_vite@6.3.5_jiti@1_0f1603681af6f569e1b3bf6fbbd58975/node_modules/@sveltejs/kit/src/runtime/components/svelte-5/layout.svelte": {
+    "file": "entries/fallbacks/layout.svelte.js",
+    "name": "entries/fallbacks/layout.svelte",
+    "src": "../../node_modules/.pnpm/@sveltejs+kit@2.27.3_@sveltejs+vite-plugin-svelte@5.1.1_svelte@5.38.0_vite@6.3.5_jiti@1_0f1603681af6f569e1b3bf6fbbd58975/node_modules/@sveltejs/kit/src/runtime/components/svelte-5/layout.svelte",
+    "isEntry": true
   },
   "../../node_modules/.pnpm/@sveltejs+kit@2.27.3_@sveltejs+vite-plugin-svelte@5.1.1_svelte@5.38.0_vite@6.3.5_jiti@1_0f1603681af6f569e1b3bf6fbbd58975/node_modules/@sveltejs/kit/src/runtime/server/index.js": {
     "file": "index.js",
@@ -44,6 +51,17 @@
       "_internal.js",
       "_environment.js"
     ]
+  },
+  "_auth.js": {
+    "file": "chunks/auth.js",
+    "name": "auth",
+    "imports": [
+      "_db.js"
+    ]
+  },
+  "_db.js": {
+    "file": "chunks/db.js",
+    "name": "db"
   },
   "_environment.js": {
     "file": "chunks/environment.js",
@@ -81,6 +99,60 @@
     "imports": [
       "_index2.js",
       "_environment.js"
+    ],
+    "dynamicImports": [
+      "src/hooks.server.ts"
+    ]
+  },
+  "_state.svelte.js": {
+    "file": "chunks/state.svelte.js",
+    "name": "state.svelte",
+    "imports": [
+      "_index2.js"
+    ]
+  },
+  "_stores.js": {
+    "file": "chunks/stores.js",
+    "name": "stores",
+    "imports": [
+      "_index2.js",
+      "_exports.js",
+      "_state.svelte.js"
+    ]
+  },
+  "_webauthn.js": {
+    "file": "chunks/webauthn.js",
+    "name": "webauthn",
+    "imports": [
+      "_db.js"
+    ]
+  },
+  "src/hooks.server.ts": {
+    "file": "chunks/hooks.server.js",
+    "name": "hooks.server",
+    "src": "src/hooks.server.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "_auth.js"
+    ]
+  },
+  "src/routes/(app)/+layout.server.ts": {
+    "file": "entries/pages/(app)/_layout.server.ts.js",
+    "name": "entries/pages/(app)/_layout.server.ts",
+    "src": "src/routes/(app)/+layout.server.ts",
+    "isEntry": true
+  },
+  "src/routes/(app)/+page.svelte": {
+    "file": "entries/pages/(app)/_page.svelte.js",
+    "name": "entries/pages/(app)/_page.svelte",
+    "src": "src/routes/(app)/+page.svelte",
+    "isEntry": true,
+    "imports": [
+      "_index2.js",
+      "_index.js"
+    ],
+    "css": [
+      "_app/immutable/assets/_page.B_zaaS-_.css"
     ]
   },
   "src/routes/+layout.svelte": {
@@ -92,20 +164,111 @@
       "_index2.js"
     ],
     "css": [
-      "_app/immutable/assets/_layout.CfWH2Wam.css"
+      "_app/immutable/assets/_layout.DbRR4FQp.css"
     ]
   },
-  "src/routes/+page.svelte": {
-    "file": "entries/pages/_page.svelte.js",
-    "name": "entries/pages/_page.svelte",
-    "src": "src/routes/+page.svelte",
+  "src/routes/api/auth/check/+server.ts": {
+    "file": "entries/endpoints/api/auth/check/_server.ts.js",
+    "name": "entries/endpoints/api/auth/check/_server.ts",
+    "src": "src/routes/api/auth/check/+server.ts",
+    "isEntry": true,
+    "imports": [
+      "_auth.js"
+    ]
+  },
+  "src/routes/api/auth/register/+server.ts": {
+    "file": "entries/endpoints/api/auth/register/_server.ts.js",
+    "name": "entries/endpoints/api/auth/register/_server.ts",
+    "src": "src/routes/api/auth/register/+server.ts",
+    "isEntry": true,
+    "imports": [
+      "_auth.js"
+    ]
+  },
+  "src/routes/api/webauthn/login/finish/+server.ts": {
+    "file": "entries/endpoints/api/webauthn/login/finish/_server.ts.js",
+    "name": "entries/endpoints/api/webauthn/login/finish/_server.ts",
+    "src": "src/routes/api/webauthn/login/finish/+server.ts",
+    "isEntry": true,
+    "imports": [
+      "_webauthn.js",
+      "_auth.js"
+    ]
+  },
+  "src/routes/api/webauthn/login/start/+server.ts": {
+    "file": "entries/endpoints/api/webauthn/login/start/_server.ts.js",
+    "name": "entries/endpoints/api/webauthn/login/start/_server.ts",
+    "src": "src/routes/api/webauthn/login/start/+server.ts",
+    "isEntry": true,
+    "imports": [
+      "_webauthn.js"
+    ]
+  },
+  "src/routes/api/webauthn/register/finish/+server.ts": {
+    "file": "entries/endpoints/api/webauthn/register/finish/_server.ts.js",
+    "name": "entries/endpoints/api/webauthn/register/finish/_server.ts",
+    "src": "src/routes/api/webauthn/register/finish/+server.ts",
+    "isEntry": true,
+    "imports": [
+      "_webauthn.js"
+    ]
+  },
+  "src/routes/api/webauthn/register/start/+server.ts": {
+    "file": "entries/endpoints/api/webauthn/register/start/_server.ts.js",
+    "name": "entries/endpoints/api/webauthn/register/start/_server.ts",
+    "src": "src/routes/api/webauthn/register/start/+server.ts",
+    "isEntry": true,
+    "imports": [
+      "_webauthn.js"
+    ]
+  },
+  "src/routes/enroll/+page.svelte": {
+    "file": "entries/pages/enroll/_page.svelte.js",
+    "name": "entries/pages/enroll/_page.svelte",
+    "src": "src/routes/enroll/+page.svelte",
     "isEntry": true,
     "imports": [
       "_index2.js",
-      "_index.js"
+      "_stores.js",
+      "_exports.js",
+      "_state.svelte.js"
+    ]
+  },
+  "src/routes/enter/+page.svelte": {
+    "file": "entries/pages/enter/_page.svelte.js",
+    "name": "entries/pages/enter/_page.svelte",
+    "src": "src/routes/enter/+page.svelte",
+    "isEntry": true,
+    "imports": [
+      "_index2.js",
+      "_exports.js",
+      "_state.svelte.js"
+    ]
+  },
+  "src/routes/spaces/+page.svelte": {
+    "file": "entries/pages/spaces/_page.svelte.js",
+    "name": "entries/pages/spaces/_page.svelte",
+    "src": "src/routes/spaces/+page.svelte",
+    "isEntry": true,
+    "imports": [
+      "_index2.js",
+      "_exports.js",
+      "_state.svelte.js"
     ],
     "css": [
-      "_app/immutable/assets/_page.B_zaaS-_.css"
+      "_app/immutable/assets/_page.BeacM6LR.css"
+    ]
+  },
+  "src/routes/verify/+page.svelte": {
+    "file": "entries/pages/verify/_page.svelte.js",
+    "name": "entries/pages/verify/_page.svelte",
+    "src": "src/routes/verify/+page.svelte",
+    "isEntry": true,
+    "imports": [
+      "_index2.js",
+      "_stores.js",
+      "_exports.js",
+      "_state.svelte.js"
     ]
   }
 }

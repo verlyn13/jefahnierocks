@@ -3,13 +3,22 @@ export { matchers } from './matchers.js';
 export const nodes = [
 	() => import('./nodes/0'),
 	() => import('./nodes/1'),
-	() => import('./nodes/2')
+	() => import('./nodes/2'),
+	() => import('./nodes/3'),
+	() => import('./nodes/4'),
+	() => import('./nodes/5'),
+	() => import('./nodes/6'),
+	() => import('./nodes/7')
 ];
 
-export const server_loads = [];
+export const server_loads = [2];
 
 export const dictionary = {
-		"/": [2]
+		"/(app)": [3,[2]],
+		"/enroll": [4],
+		"/enter": [5],
+		"/spaces": [6],
+		"/verify": [7]
 	};
 
 export const hooks = {

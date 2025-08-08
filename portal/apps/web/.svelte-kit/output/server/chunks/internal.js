@@ -408,7 +408,8 @@ function Root($$payload, $$props) {
     components = [],
     form,
     data_0 = null,
-    data_1 = null
+    data_1 = null,
+    data_2 = null
   } = $$props;
   {
     setContext("__svelte__", stores);
@@ -416,7 +417,7 @@ function Root($$payload, $$props) {
   {
     stores.page.set(page);
   }
-  const Pyramid_1 = constructors[1];
+  const Pyramid_2 = constructors[2];
   if (constructors[1]) {
     $$payload.out.push("<!--[-->");
     const Pyramid_0 = constructors[0];
@@ -426,9 +427,30 @@ function Root($$payload, $$props) {
       form,
       params: page.params,
       children: ($$payload2) => {
-        $$payload2.out.push(`<!---->`);
-        Pyramid_1($$payload2, { data: data_1, form, params: page.params });
-        $$payload2.out.push(`<!---->`);
+        if (constructors[2]) {
+          $$payload2.out.push("<!--[-->");
+          const Pyramid_1 = constructors[1];
+          $$payload2.out.push(`<!---->`);
+          Pyramid_1($$payload2, {
+            data: data_1,
+            form,
+            params: page.params,
+            children: ($$payload3) => {
+              $$payload3.out.push(`<!---->`);
+              Pyramid_2($$payload3, { data: data_2, form, params: page.params });
+              $$payload3.out.push(`<!---->`);
+            },
+            $$slots: { default: true }
+          });
+          $$payload2.out.push(`<!---->`);
+        } else {
+          $$payload2.out.push("<!--[!-->");
+          const Pyramid_1 = constructors[1];
+          $$payload2.out.push(`<!---->`);
+          Pyramid_1($$payload2, { data: data_1, form, params: page.params });
+          $$payload2.out.push(`<!---->`);
+        }
+        $$payload2.out.push(`<!--]-->`);
       },
       $$slots: { default: true }
     });
@@ -534,7 +556,7 @@ const options = {
 		<div class="error">
 			<span class="status">` + status + '</span>\n			<div class="message">\n				<h1>' + message + "</h1>\n			</div>\n		</div>\n	</body>\n</html>\n"
   },
-  version_hash: "1cr2711"
+  version_hash: "wsbjw7"
 };
 async function get_hooks() {
   let handle;
@@ -542,6 +564,7 @@ async function get_hooks() {
   let handleError;
   let handleValidationError;
   let init;
+  ({ handle, handleFetch, handleError, handleValidationError, init } = await import("./hooks.server.js"));
   let reroute;
   let transport;
   return {

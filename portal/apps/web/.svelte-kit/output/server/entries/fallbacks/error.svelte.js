@@ -1,5 +1,6 @@
-import { F as noop, G as getContext, I as escape_html, D as pop, A as push } from "../../chunks/index2.js";
+import { F as getContext, G as escape_html, D as pop, A as push } from "../../chunks/index2.js";
 import "clsx";
+import "../../chunks/state.svelte.js";
 import "@sveltejs/kit/internal";
 import "../../chunks/exports.js";
 import { w as writable } from "../../chunks/index.js";
@@ -12,19 +13,6 @@ function create_updated_store() {
       check: async () => false
     };
   }
-}
-const is_legacy = noop.toString().includes("$$") || /function \w+\(\) \{\}/.test(noop.toString());
-if (is_legacy) {
-  ({
-    data: {},
-    form: null,
-    error: null,
-    params: {},
-    route: { id: null },
-    state: {},
-    status: -1,
-    url: new URL("https://example.com")
-  });
 }
 const stores = {
   updated: /* @__PURE__ */ create_updated_store()

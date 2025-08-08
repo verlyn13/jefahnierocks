@@ -1699,6 +1699,9 @@ function clsx(value) {
 }
 function to_class(value, hash, directives) {
   var classname = value == null ? "" : "" + value;
+  if (hash) {
+    classname = classname ? classname + " " + hash : hash;
+  }
   return classname === "" ? null : classname;
 }
 function append_styles(styles, important = false) {
@@ -1712,6 +1715,12 @@ function append_styles(styles, important = false) {
   }
   return css;
 }
+function to_css_name(name) {
+  if (name[0] !== "-" || name[1] !== "-") {
+    return name.toLowerCase();
+  }
+  return name;
+}
 function to_style(value, styles) {
   if (styles) {
     var new_style = "";
@@ -1723,6 +1732,60 @@ function to_style(value, styles) {
     } else {
       normal_styles = styles;
     }
+    if (value) {
+      value = String(value).replaceAll(/\s*\/\*.*?\*\/\s*/g, "").trim();
+      var in_str = false;
+      var in_apo = 0;
+      var in_comment = false;
+      var reserved_names = [];
+      if (normal_styles) {
+        reserved_names.push(...Object.keys(normal_styles).map(to_css_name));
+      }
+      if (important_styles) {
+        reserved_names.push(...Object.keys(important_styles).map(to_css_name));
+      }
+      var start_index = 0;
+      var name_index = -1;
+      const len = value.length;
+      for (var i = 0; i < len; i++) {
+        var c = value[i];
+        if (in_comment) {
+          if (c === "/" && value[i - 1] === "*") {
+            in_comment = false;
+          }
+        } else if (in_str) {
+          if (in_str === c) {
+            in_str = false;
+          }
+        } else if (c === "/" && value[i + 1] === "*") {
+          in_comment = true;
+        } else if (c === '"' || c === "'") {
+          in_str = c;
+        } else if (c === "(") {
+          in_apo++;
+        } else if (c === ")") {
+          in_apo--;
+        }
+        if (!in_comment && in_str === false && in_apo === 0) {
+          if (c === ":" && name_index === -1) {
+            name_index = i;
+          } else if (c === ";" || i === len - 1) {
+            if (name_index !== -1) {
+              var name = to_css_name(value.substring(start_index, name_index).trim());
+              if (!reserved_names.includes(name)) {
+                if (c !== ";") {
+                  i++;
+                }
+                var property = value.substring(start_index, i).trim();
+                new_style += " " + property + ";";
+              }
+            }
+            start_index = i + 1;
+            name_index = -1;
+          }
+        }
+      }
+    }
     if (normal_styles) {
       new_style += append_styles(normal_styles);
     }
@@ -1732,7 +1795,7 @@ function to_style(value, styles) {
     new_style = new_style.trim();
     return new_style === "" ? null : new_style;
   }
-  return String(value);
+  return value == null ? null : String(value);
 }
 function subscribe_to_store(store, run, invalidate) {
   if (store == null) {
@@ -1948,7 +2011,7 @@ function stringify(value) {
   return typeof value === "string" ? value : value == null ? "" : value + "";
 }
 function attr_class(value, hash, directives) {
-  var result = to_class(value);
+  var result = to_class(value, hash);
   return result ? ` class="${escape_html(result, true)}"` : "";
 }
 function attr_style(value, directives) {
@@ -2027,10 +2090,10 @@ export {
   COMMENT_NODE as C,
   pop as D,
   slot as E,
-  noop as F,
-  getContext as G,
+  getContext as F,
+  escape_html as G,
   HYDRATION_ERROR as H,
-  escape_html as I,
+  noop as I,
   sanitize_props as J,
   rest_props as K,
   LEGACY_PROPS as L,

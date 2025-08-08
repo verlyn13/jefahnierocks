@@ -1,3 +1,29 @@
 {
-	"/": []
+	"/(app)": [
+		"src/routes/(app)/+layout.server.ts",
+		"src/routes/(app)/+layout.server.ts"
+	],
+	"/": [],
+	"/api/auth/check": [
+		"src/routes/api/auth/check/+server.ts"
+	],
+	"/api/auth/register": [
+		"src/routes/api/auth/register/+server.ts"
+	],
+	"/api/webauthn/login/finish": [
+		"src/routes/api/webauthn/login/finish/+server.ts"
+	],
+	"/api/webauthn/login/start": [
+		"src/routes/api/webauthn/login/start/+server.ts"
+	],
+	"/api/webauthn/register/finish": [
+		"src/routes/api/webauthn/register/finish/+server.ts"
+	],
+	"/api/webauthn/register/start": [
+		"src/routes/api/webauthn/register/start/+server.ts"
+	],
+	"/enroll": [],
+	"/enter": [],
+	"/spaces": [],
+	"/verify": []
 }
