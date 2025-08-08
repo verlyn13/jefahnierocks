@@ -22,9 +22,8 @@
   ];
   
   function selectSpace(spaceId: string) {
-    // For now, just show a message
-    // In the future, this will navigate to the actual space
-    alert(`Space "${spaceId}" selected. Portal features coming soon!`);
+    // Navigate to the actual space
+    goto(`/space/${spaceId}`);
   }
   
   function createSpace() {
