@@ -18,8 +18,8 @@ import { nanoid } from "nanoid";
 import { dev } from "$app/environment";
 
 const RP_NAME = "Jefahnie Portal";
-const RP_ID = dev ? "localhost" : "jefahnie-portal.vercel.app";
-const ORIGIN = dev ? "http://localhost:5173" : "https://jefahnie-portal.vercel.app";
+const RP_ID = dev ? "localhost" : "jefahnierocks.com";
+const ORIGIN = dev ? "http://localhost:5173" : "https://jefahnierocks.com";
 
 export async function generateRegistrationChallenge(userId: string, email: string) {
   const userResult = await getDb().execute({
