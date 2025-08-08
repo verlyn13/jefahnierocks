@@ -1,19 +1,29 @@
-import { createClient } from "@libsql/client";
-import { dev, building } from "$app/environment";
+import { createClient, type Client } from "@libsql/client";
+import { building } from "$app/environment";
 import { env } from "$env/dynamic/private";
 
-// Create database client
-const db = createClient({
-	url: env.TURSO_DATABASE_URL || "file:portal.db",
-	authToken: env.TURSO_AUTH_TOKEN
-});
+// Lazy database client
+let db: Client | null = null;
+
+function getDb(): Client {
+	if (!db) {
+		// Only create the client when actually needed
+		db = createClient({
+			url: env.TURSO_DATABASE_URL || "file:portal.db",
+			authToken: env.TURSO_AUTH_TOKEN
+		});
+	}
+	return db;
+}
 
 // Export a function to initialize the database
 export async function initializeDatabase() {
 	if (building) return; // Don't initialize during build
 	
+	const database = getDb();
+	
 	try {
-		await db.execute(`
+		await database.execute(`
 		  CREATE TABLE IF NOT EXISTS user (
 		    id TEXT PRIMARY KEY,
 		    email TEXT UNIQUE NOT NULL,
@@ -23,7 +33,7 @@ export async function initializeDatabase() {
 		  )
 		`);
 
-		await db.execute(`
+		await database.execute(`
 		  CREATE TABLE IF NOT EXISTS session (
 		    id TEXT PRIMARY KEY,
 		    user_id TEXT NOT NULL REFERENCES user(id) ON DELETE CASCADE,
@@ -32,7 +42,7 @@ export async function initializeDatabase() {
 		  )
 		`);
 
-		await db.execute(`
+		await database.execute(`
 		  CREATE TABLE IF NOT EXISTS credential (
 		    id TEXT PRIMARY KEY,
 		    user_id TEXT NOT NULL REFERENCES user(id) ON DELETE CASCADE,
@@ -46,7 +56,7 @@ export async function initializeDatabase() {
 		  )
 		`);
 
-		await db.execute(`
+		await database.execute(`
 		  CREATE TABLE IF NOT EXISTS space (
 		    id TEXT PRIMARY KEY,
 		    name TEXT NOT NULL,
@@ -56,7 +66,7 @@ export async function initializeDatabase() {
 		  )
 		`);
 
-		await db.execute(`
+		await database.execute(`
 		  CREATE TABLE IF NOT EXISTS membership (
 		    id TEXT PRIMARY KEY,
 		    user_id TEXT NOT NULL REFERENCES user(id) ON DELETE CASCADE,
@@ -67,7 +77,7 @@ export async function initializeDatabase() {
 		  )
 		`);
 
-		await db.execute(`
+		await database.execute(`
 		  CREATE TABLE IF NOT EXISTS invite (
 		    id TEXT PRIMARY KEY,
 		    space_id TEXT NOT NULL REFERENCES space(id) ON DELETE CASCADE,
@@ -80,7 +90,7 @@ export async function initializeDatabase() {
 		  )
 		`);
 
-		await db.execute(`
+		await database.execute(`
 		  CREATE TABLE IF NOT EXISTS magic_link (
 		    id TEXT PRIMARY KEY,
 		    email TEXT NOT NULL,
@@ -91,7 +101,7 @@ export async function initializeDatabase() {
 		  )
 		`);
 
-		await db.execute(`
+		await database.execute(`
 		  CREATE TABLE IF NOT EXISTS auth_challenge (
 		    id TEXT PRIMARY KEY,
 		    user_id TEXT,
@@ -104,16 +114,24 @@ export async function initializeDatabase() {
 		`);
 
 		// Create indexes
-		await db.execute(`CREATE INDEX IF NOT EXISTS idx_session_user_id ON session(user_id)`);
-		await db.execute(`CREATE INDEX IF NOT EXISTS idx_credential_user_id ON credential(user_id)`);
-		await db.execute(`CREATE INDEX IF NOT EXISTS idx_membership_user_id ON membership(user_id)`);
-		await db.execute(`CREATE INDEX IF NOT EXISTS idx_membership_space_id ON membership(space_id)`);
-		await db.execute(`CREATE INDEX IF NOT EXISTS idx_invite_email ON invite(email)`);
-		await db.execute(`CREATE INDEX IF NOT EXISTS idx_magic_link_email ON magic_link(email)`);
+		await database.execute(`CREATE INDEX IF NOT EXISTS idx_session_user_id ON session(user_id)`);
+		await database.execute(`CREATE INDEX IF NOT EXISTS idx_credential_user_id ON credential(user_id)`);
+		await database.execute(`CREATE INDEX IF NOT EXISTS idx_membership_user_id ON membership(user_id)`);
+		await database.execute(`CREATE INDEX IF NOT EXISTS idx_membership_space_id ON membership(space_id)`);
+		await database.execute(`CREATE INDEX IF NOT EXISTS idx_invite_email ON invite(email)`);
+		await database.execute(`CREATE INDEX IF NOT EXISTS idx_magic_link_email ON magic_link(email)`);
 	} catch (error) {
 		console.error("Database initialization error:", error);
 		// Continue even if tables exist
 	}
 }
 
-export default db;
+// Export a proxy that creates the client lazily
+const dbProxy = new Proxy({} as Client, {
+	get(_target, prop, receiver) {
+		const database = getDb();
+		return Reflect.get(database, prop, receiver);
+	}
+});
+
+export default dbProxy;
