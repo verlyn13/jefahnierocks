@@ -1,5 +1,6 @@
 import { json } from "@sveltejs/kit";
 import { generateRegistrationChallenge } from "$lib/server/webauthn";
+import { isEmailAllowed, getWhitelistError } from "$lib/server/whitelist";
 
 export async function POST({ request }) {
   try {
@@ -7,6 +8,11 @@ export async function POST({ request }) {
     
     if (!userId || !email) {
       return json({ error: "User ID and email required" }, { status: 400 });
+    }
+    
+    // Check whitelist
+    if (!isEmailAllowed(email)) {
+      return json({ error: getWhitelistError() }, { status: 403 });
     }
     
     const options = await generateRegistrationChallenge(userId, email);

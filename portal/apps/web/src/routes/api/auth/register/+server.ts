@@ -1,5 +1,6 @@
 import { json } from "@sveltejs/kit";
 import { createUser, setSession } from "$lib/server/auth";
+import { isEmailAllowed, getWhitelistError } from "$lib/server/whitelist";
 
 export async function POST({ request, cookies }) {
   try {
@@ -7,6 +8,11 @@ export async function POST({ request, cookies }) {
     
     if (!email) {
       return json({ error: "Email required" }, { status: 400 });
+    }
+    
+    // Check whitelist
+    if (!isEmailAllowed(email)) {
+      return json({ error: getWhitelistError() }, { status: 403 });
     }
     
     const userId = await createUser(email, name);
