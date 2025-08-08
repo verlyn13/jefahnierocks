@@ -1,0 +1,77 @@
+{
+  "description": "DNS records for jefahnierocks.com to work with GitHub Pages",
+  "records": [
+    {
+      "type": "A",
+      "name": "@",
+      "content": "185.199.108.153",
+      "ttl": 3600,
+      "proxied": false,
+      "comment": "GitHub Pages IP 1"
+    },
+    {
+      "type": "A",
+      "name": "@",
+      "content": "185.199.109.153",
+      "ttl": 3600,
+      "proxied": false,
+      "comment": "GitHub Pages IP 2"
+    },
+    {
+      "type": "A",
+      "name": "@",
+      "content": "185.199.110.153",
+      "ttl": 3600,
+      "proxied": false,
+      "comment": "GitHub Pages IP 3"
+    },
+    {
+      "type": "A",
+      "name": "@",
+      "content": "185.199.111.153",
+      "ttl": 3600,
+      "proxied": false,
+      "comment": "GitHub Pages IP 4"
+    },
+    {
+      "type": "AAAA",
+      "name": "@",
+      "content": "2606:50c0:8000::153",
+      "ttl": 3600,
+      "proxied": false,
+      "comment": "GitHub Pages IPv6 1"
+    },
+    {
+      "type": "AAAA",
+      "name": "@",
+      "content": "2606:50c0:8001::153",
+      "ttl": 3600,
+      "proxied": false,
+      "comment": "GitHub Pages IPv6 2"
+    },
+    {
+      "type": "AAAA",
+      "name": "@",
+      "content": "2606:50c0:8002::153",
+      "ttl": 3600,
+      "proxied": false,
+      "comment": "GitHub Pages IPv6 3"
+    },
+    {
+      "type": "AAAA",
+      "name": "@",
+      "content": "2606:50c0:8003::153",
+      "ttl": 3600,
+      "proxied": false,
+      "comment": "GitHub Pages IPv6 4"
+    },
+    {
+      "type": "CNAME",
+      "name": "www",
+      "content": "verlyn13.github.io",
+      "ttl": 3600,
+      "proxied": false,
+      "comment": "WWW subdomain to GitHub Pages"
+    }
+  ]
+}
