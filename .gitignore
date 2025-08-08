@@ -31,7 +31,7 @@ env/
 
 # Build outputs (will add more when stack is chosen)
 dist/
-build/
+# build/ - commenting out for GitHub Pages deployment
 out/
 *.pyc
 __pycache__/

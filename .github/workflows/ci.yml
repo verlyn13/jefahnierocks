@@ -44,10 +44,6 @@ jobs:
           cd portal
           pnpm -r build
       
-      - name: Copy CNAME to build output
-        run: |
-          cp portal/apps/web/static/CNAME build/CNAME || true
-      
       - name: Setup Pages
         uses: actions/configure-pages@v4
       
