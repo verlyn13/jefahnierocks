@@ -1,0 +1,6 @@
+# This file defines who is responsible for code in this repository.
+# These owners will be the default owners for everything in the repo.
+# Unless a later match takes precedence, @verlyn13 will be requested for
+# review when someone opens a pull request.
+
+* @verlyn13

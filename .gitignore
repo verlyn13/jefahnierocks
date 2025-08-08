@@ -1,0 +1,44 @@
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Logs
+*.log
+logs/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Dependencies (will add more when stack is chosen)
+node_modules/
+vendor/
+venv/
+env/
+*.egg-info/
+
+# Build outputs (will add more when stack is chosen)
+dist/
+build/
+out/
+*.pyc
+__pycache__/
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+tmp/
+temp/
