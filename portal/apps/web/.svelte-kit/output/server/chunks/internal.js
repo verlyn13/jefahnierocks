@@ -1,6 +1,7 @@
-import { H as HYDRATION_ERROR, g as get_next_sibling, d as define_property, s as set_active_reaction, a as set_active_effect, i as is_array, b as active_effect, c as active_reaction, e as init_operations, f as get_first_child, C as COMMENT_NODE, h as HYDRATION_START, j as HYDRATION_END, k as hydration_failed, l as clear_text_content, m as array_from, n as component_root, o as is_passive_event, p as create_text, q as branch, r as push, t as component_context, u as pop, v as set, L as LEGACY_PROPS, w as get, x as flushSync, y as mutable_source, z as render, A as push$1, B as setContext, D as pop$1 } from "./index2.js";
+import { H as HYDRATION_ERROR, l as get_next_sibling, m as define_property, o as set_active_reaction, q as set_active_effect, t as is_array, v as active_effect, w as active_reaction, x as init_operations, y as get_first_child, C as COMMENT_NODE, z as HYDRATION_START, A as HYDRATION_END, B as hydration_failed, D as clear_text_content, E as array_from, F as component_root, G as is_passive_event, I as create_text, J as branch, K as push, L as component_context, M as pop, N as set, O as LEGACY_PROPS, P as get, Q as flushSync, R as mutable_source, S as render, f as push$1, T as setContext, p as pop$1 } from "./index2.js";
 import "clsx";
-import "./environment.js";
+import "./private.js";
+import "./paths.js";
 let public_env = {};
 let safe_public_env = {};
 function set_private_env(environment) {
@@ -556,7 +557,7 @@ const options = {
 		<div class="error">
 			<span class="status">` + status + '</span>\n			<div class="message">\n				<h1>' + message + "</h1>\n			</div>\n		</div>\n	</body>\n</html>\n"
   },
-  version_hash: "wsbjw7"
+  version_hash: "48nten"
 };
 async function get_hooks() {
   let handle;

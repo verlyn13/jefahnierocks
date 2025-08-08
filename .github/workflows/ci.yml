@@ -40,6 +40,9 @@ jobs:
           pnpm install --frozen-lockfile
       
       - name: Build portal
+        env:
+          TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
+          TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
         run: |
           cd portal
           pnpm -r build

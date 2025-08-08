@@ -14,6 +14,7 @@
   },
   "devDependencies": {
     "@sveltejs/adapter-static": "^3.0.8",
+    "@sveltejs/adapter-vercel": "^5.8.2",
     "@sveltejs/kit": "^2.15.4",
     "@sveltejs/vite-plugin-svelte": "^5.0.4",
     "@types/d3-force": "^3.0.10",

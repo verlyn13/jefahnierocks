@@ -1,4 +1,4 @@
-import { I as noop, a0 as safe_not_equal, a1 as subscribe_to_store, a2 as run_all } from "./index2.js";
+import { n as noop, s as safe_not_equal, a as subscribe_to_store, r as run_all } from "./index2.js";
 const subscriber_queue = [];
 function readable(value, start) {
   return {

@@ -1,19 +1,20 @@
 {
-  "../../node_modules/.pnpm/@sveltejs+kit@2.27.3_@sveltejs+vite-plugin-svelte@5.1.1_svelte@5.38.0_vite@6.3.5_jiti@1_0f1603681af6f569e1b3bf6fbbd58975/node_modules/@sveltejs/kit/src/runtime/app/server/remote/index.js": {
+  "../../node_modules/.pnpm/@sveltejs+kit@2.27.3_@sveltejs+vite-plugin-svelte@5.1.1_svelte@5.38.0_vite@6.3.5_@types_862c592dc20f919d195ce815e0f4fb27/node_modules/@sveltejs/kit/src/runtime/app/server/remote/index.js": {
     "file": "remote-entry.js",
     "name": "remote-entry",
-    "src": "../../node_modules/.pnpm/@sveltejs+kit@2.27.3_@sveltejs+vite-plugin-svelte@5.1.1_svelte@5.38.0_vite@6.3.5_jiti@1_0f1603681af6f569e1b3bf6fbbd58975/node_modules/@sveltejs/kit/src/runtime/app/server/remote/index.js",
+    "src": "../../node_modules/.pnpm/@sveltejs+kit@2.27.3_@sveltejs+vite-plugin-svelte@5.1.1_svelte@5.38.0_vite@6.3.5_@types_862c592dc20f919d195ce815e0f4fb27/node_modules/@sveltejs/kit/src/runtime/app/server/remote/index.js",
     "isEntry": true,
     "imports": [
       "_event-state.js",
       "_false.js",
-      "_environment.js"
+      "_paths.js",
+      "_private.js"
     ]
   },
-  "../../node_modules/.pnpm/@sveltejs+kit@2.27.3_@sveltejs+vite-plugin-svelte@5.1.1_svelte@5.38.0_vite@6.3.5_jiti@1_0f1603681af6f569e1b3bf6fbbd58975/node_modules/@sveltejs/kit/src/runtime/components/svelte-5/error.svelte": {
+  "../../node_modules/.pnpm/@sveltejs+kit@2.27.3_@sveltejs+vite-plugin-svelte@5.1.1_svelte@5.38.0_vite@6.3.5_@types_862c592dc20f919d195ce815e0f4fb27/node_modules/@sveltejs/kit/src/runtime/components/svelte-5/error.svelte": {
     "file": "entries/fallbacks/error.svelte.js",
     "name": "entries/fallbacks/error.svelte",
-    "src": "../../node_modules/.pnpm/@sveltejs+kit@2.27.3_@sveltejs+vite-plugin-svelte@5.1.1_svelte@5.38.0_vite@6.3.5_jiti@1_0f1603681af6f569e1b3bf6fbbd58975/node_modules/@sveltejs/kit/src/runtime/components/svelte-5/error.svelte",
+    "src": "../../node_modules/.pnpm/@sveltejs+kit@2.27.3_@sveltejs+vite-plugin-svelte@5.1.1_svelte@5.38.0_vite@6.3.5_@types_862c592dc20f919d195ce815e0f4fb27/node_modules/@sveltejs/kit/src/runtime/components/svelte-5/error.svelte",
     "isEntry": true,
     "imports": [
       "_index2.js",
@@ -22,24 +23,25 @@
       "_index.js"
     ]
   },
-  "../../node_modules/.pnpm/@sveltejs+kit@2.27.3_@sveltejs+vite-plugin-svelte@5.1.1_svelte@5.38.0_vite@6.3.5_jiti@1_0f1603681af6f569e1b3bf6fbbd58975/node_modules/@sveltejs/kit/src/runtime/components/svelte-5/layout.svelte": {
+  "../../node_modules/.pnpm/@sveltejs+kit@2.27.3_@sveltejs+vite-plugin-svelte@5.1.1_svelte@5.38.0_vite@6.3.5_@types_862c592dc20f919d195ce815e0f4fb27/node_modules/@sveltejs/kit/src/runtime/components/svelte-5/layout.svelte": {
     "file": "entries/fallbacks/layout.svelte.js",
     "name": "entries/fallbacks/layout.svelte",
-    "src": "../../node_modules/.pnpm/@sveltejs+kit@2.27.3_@sveltejs+vite-plugin-svelte@5.1.1_svelte@5.38.0_vite@6.3.5_jiti@1_0f1603681af6f569e1b3bf6fbbd58975/node_modules/@sveltejs/kit/src/runtime/components/svelte-5/layout.svelte",
+    "src": "../../node_modules/.pnpm/@sveltejs+kit@2.27.3_@sveltejs+vite-plugin-svelte@5.1.1_svelte@5.38.0_vite@6.3.5_@types_862c592dc20f919d195ce815e0f4fb27/node_modules/@sveltejs/kit/src/runtime/components/svelte-5/layout.svelte",
     "isEntry": true
   },
-  "../../node_modules/.pnpm/@sveltejs+kit@2.27.3_@sveltejs+vite-plugin-svelte@5.1.1_svelte@5.38.0_vite@6.3.5_jiti@1_0f1603681af6f569e1b3bf6fbbd58975/node_modules/@sveltejs/kit/src/runtime/server/index.js": {
+  "../../node_modules/.pnpm/@sveltejs+kit@2.27.3_@sveltejs+vite-plugin-svelte@5.1.1_svelte@5.38.0_vite@6.3.5_@types_862c592dc20f919d195ce815e0f4fb27/node_modules/@sveltejs/kit/src/runtime/server/index.js": {
     "file": "index.js",
     "name": "index",
-    "src": "../../node_modules/.pnpm/@sveltejs+kit@2.27.3_@sveltejs+vite-plugin-svelte@5.1.1_svelte@5.38.0_vite@6.3.5_jiti@1_0f1603681af6f569e1b3bf6fbbd58975/node_modules/@sveltejs/kit/src/runtime/server/index.js",
+    "src": "../../node_modules/.pnpm/@sveltejs+kit@2.27.3_@sveltejs+vite-plugin-svelte@5.1.1_svelte@5.38.0_vite@6.3.5_@types_862c592dc20f919d195ce815e0f4fb27/node_modules/@sveltejs/kit/src/runtime/server/index.js",
     "isEntry": true,
     "imports": [
       "_false.js",
-      "_environment.js",
+      "_paths.js",
       "_event-state.js",
       "_exports.js",
       "_index.js",
-      "_internal.js"
+      "_internal.js",
+      "_private.js"
     ]
   },
   ".svelte-kit/generated/server/internal.js": {
@@ -49,7 +51,8 @@
     "isEntry": true,
     "imports": [
       "_internal.js",
-      "_environment.js"
+      "_private.js",
+      "_paths.js"
     ]
   },
   "_auth.js": {
@@ -61,11 +64,13 @@
   },
   "_db.js": {
     "file": "chunks/db.js",
-    "name": "db"
-  },
-  "_environment.js": {
-    "file": "chunks/environment.js",
-    "name": "environment"
+    "name": "db",
+    "imports": [
+      "_private.js"
+    ],
+    "dynamicImports": [
+      "_private.js"
+    ]
   },
   "_event-state.js": {
     "file": "chunks/event-state.js",
@@ -98,11 +103,21 @@
     "name": "internal",
     "imports": [
       "_index2.js",
-      "_environment.js"
+      "_private.js",
+      "_paths.js"
     ],
     "dynamicImports": [
       "src/hooks.server.ts"
     ]
+  },
+  "_paths.js": {
+    "file": "chunks/paths.js",
+    "name": "paths"
+  },
+  "_private.js": {
+    "file": "chunks/private.js",
+    "name": "private",
+    "isDynamicEntry": true
   },
   "_state.svelte.js": {
     "file": "chunks/state.svelte.js",

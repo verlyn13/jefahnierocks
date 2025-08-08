@@ -15,9 +15,11 @@ import type {
 import db from "./db";
 import { nanoid } from "nanoid";
 
+import { dev } from "$app/environment";
+
 const RP_NAME = "Jefahnie Portal";
-const RP_ID = "localhost"; // Change to your domain in production
-const ORIGIN = "http://localhost:5173"; // Change to your URL in production
+const RP_ID = dev ? "localhost" : "jefahnie-portal.vercel.app";
+const ORIGIN = dev ? "http://localhost:5173" : "https://jefahnie-portal.vercel.app";
 
 export async function generateRegistrationChallenge(userId: string, email: string) {
   const userResult = await db.execute({

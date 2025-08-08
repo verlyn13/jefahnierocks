@@ -1,12 +1,13 @@
 import { B as BROWSER } from "./chunks/false.js";
 import { json, text, error } from "@sveltejs/kit";
 import { HttpError, SvelteKitError, Redirect, ActionFailure } from "@sveltejs/kit/internal";
-import { a as assets, b as base, c as app_dir, o as override, r as reset, p as prerendering } from "./chunks/environment.js";
-import { w as with_event, i as is_primitive, g as get_type, D as DevalueError, a as is_plain_object, e as enumerable_symbols, s as stringify_key, b as stringify_string, c as escaped, d as stringify, v as validate_depends, f as get_event_state, h as stringify$1, p as parse_remote_arg, T as TRAILING_SLASH_PARAM, I as INVALIDATED_PARAM, E as EVENT_STATE, j as create_event_state } from "./chunks/event-state.js";
+import { c as assets, b as base, a as app_dir, o as override, r as reset } from "./chunks/paths.js";
+import { w as with_event, i as is_primitive, d as get_type, D as DevalueError, e as is_plain_object, f as enumerable_symbols, h as stringify_key, j as stringify_string, k as escaped, l as stringify, v as validate_depends, a as get_event_state, b as stringify$1, m as parse_remote_arg, T as TRAILING_SLASH_PARAM, I as INVALIDATED_PARAM, E as EVENT_STATE, n as create_event_state } from "./chunks/event-state.js";
 import { m as make_trackable, d as disable_search, a as decode_params, v as validate_layout_server_exports, b as validate_layout_exports, c as validate_page_server_exports, e as validate_page_exports, n as normalize_path, r as resolve, f as decode_pathname, g as validate_server_exports } from "./chunks/exports.js";
 import { r as readable, w as writable } from "./chunks/index.js";
 import { p as public_env, s as safe_public_env, r as read_implementation, o as options, g as get_hooks, a as set_private_env, b as set_public_env, c as set_safe_public_env, d as set_read_implementation } from "./chunks/internal.js";
 import { parse, serialize } from "cookie";
+import { p as prerendering } from "./chunks/private.js";
 const SVELTE_KIT_ASSETS = "/_svelte_kit_assets";
 const ENDPOINT_METHODS = ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"];
 const PAGE_METHODS = ["GET", "POST", "HEAD"];

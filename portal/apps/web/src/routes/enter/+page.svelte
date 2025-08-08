@@ -1,10 +1,12 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import { onMount } from "svelte";
+  import { browser } from "$app/environment";
   
   let email = "";
   let loading = false;
   let error = "";
+  let demoMode = false; // Production mode with real auth
   
   async function handleSubmit() {
     if (!email) return;
@@ -12,6 +14,25 @@
     loading = true;
     error = "";
     
+    // Demo mode - just navigate based on email
+    if (demoMode && browser) {
+      setTimeout(() => {
+        // Store email in sessionStorage for demo
+        sessionStorage.setItem("demo_email", email);
+        
+        // Check if this looks like a returning user (has @ and .)
+        if (email.includes("@") && email.includes(".")) {
+          // Simulate existing user
+          goto(`/verify?email=${encodeURIComponent(email)}`);
+        } else {
+          // Simulate new user
+          goto(`/enroll?email=${encodeURIComponent(email)}`);
+        }
+      }, 500);
+      return;
+    }
+    
+    // Production mode with real API
     try {
       const res = await fetch("/api/auth/check", {
         method: "POST",
@@ -83,6 +104,9 @@
     <div class="text-center mb-8">
       <h1 class="text-3xl font-bold text-white mb-2">Welcome to the Portal</h1>
       <p class="text-white/60">One key. No password. Your field awaits.</p>
+      {#if demoMode}
+        <p class="text-aurora-500 text-xs mt-2">(Demo Mode - No server required)</p>
+      {/if}
     </div>
     
     <form on:submit|preventDefault={handleSubmit} class="space-y-4">
