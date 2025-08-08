@@ -1,0 +1,77 @@
+{
+  "comment": "DNS configuration for Vercel deployment - Updated 2025-08-08",
+  "records_to_delete": [
+    {
+      "type": "A",
+      "name": "jefahnierocks.com",
+      "content": "185.199.108.153",
+      "action": "DELETE"
+    },
+    {
+      "type": "A",
+      "name": "jefahnierocks.com",
+      "content": "185.199.109.153",
+      "action": "DELETE"
+    },
+    {
+      "type": "A",
+      "name": "jefahnierocks.com",
+      "content": "185.199.110.153",
+      "action": "DELETE"
+    },
+    {
+      "type": "A",
+      "name": "jefahnierocks.com",
+      "content": "185.199.111.153",
+      "action": "DELETE"
+    },
+    {
+      "type": "AAAA",
+      "name": "jefahnierocks.com",
+      "content": "2606:50c0:8000::153",
+      "action": "DELETE"
+    },
+    {
+      "type": "AAAA",
+      "name": "jefahnierocks.com",
+      "content": "2606:50c0:8001::153",
+      "action": "DELETE"
+    },
+    {
+      "type": "AAAA",
+      "name": "jefahnierocks.com",
+      "content": "2606:50c0:8002::153",
+      "action": "DELETE"
+    },
+    {
+      "type": "AAAA",
+      "name": "jefahnierocks.com",
+      "content": "2606:50c0:8003::153",
+      "action": "DELETE"
+    },
+    {
+      "type": "CNAME",
+      "name": "www",
+      "content": "verlyn13.github.io",
+      "action": "DELETE"
+    }
+  ],
+  "records_to_add": [
+    {
+      "type": "A",
+      "name": "@",
+      "content": "76.76.21.21",
+      "ttl": 3600,
+      "proxied": false,
+      "comment": "Vercel production"
+    },
+    {
+      "type": "CNAME",
+      "name": "www",
+      "content": "cname.vercel-dns.com",
+      "ttl": 3600,
+      "proxied": false,
+      "comment": "Vercel www redirect"
+    }
+  ]
+}
