@@ -8,8 +8,10 @@ const db = createClient({
 	authToken: env.TURSO_AUTH_TOKEN
 });
 
-// Initialize database schema only if not building
-if (!building) {
+// Export a function to initialize the database
+export async function initializeDatabase() {
+	if (building) return; // Don't initialize during build
+	
 	try {
 		await db.execute(`
 		  CREATE TABLE IF NOT EXISTS user (

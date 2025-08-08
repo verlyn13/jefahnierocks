@@ -1,7 +1,20 @@
 import { lucia } from "$lib/server/auth";
+import { initializeDatabase } from "$lib/server/db";
 import type { Handle } from "@sveltejs/kit";
 
+// Initialize database on first request
+let dbInitialized = false;
+async function ensureDbInitialized() {
+  if (!dbInitialized) {
+    await initializeDatabase();
+    dbInitialized = true;
+  }
+}
+
 export const handle: Handle = async ({ event, resolve }) => {
+  // Initialize database if needed
+  await ensureDbInitialized();
+  
   const sessionId = event.cookies.get(lucia.sessionCookieName);
   
   if (!sessionId) {
