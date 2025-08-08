@@ -1,0 +1,14 @@
+setup:
+  project: jefahnierocks
+  config: dev
+
+environments:
+  - name: dev
+    project: jefahnierocks
+    config: dev
+  - name: staging
+    project: jefahnierocks
+    config: staging
+  - name: production
+    project: jefahnierocks
+    config: production
