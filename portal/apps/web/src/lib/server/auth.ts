@@ -52,7 +52,7 @@ interface DatabaseUserAttributes {
 
 export async function createUser(email: string, name?: string) {
   const userId = crypto.randomUUID();
-  await db.execute({
+  await getDb().execute({
     sql: "INSERT INTO user (id, email, name) VALUES (?, ?, ?)",
     args: [userId, email, name || email.split("@")[0]]
   });
@@ -60,7 +60,7 @@ export async function createUser(email: string, name?: string) {
 }
 
 export async function getUserByEmail(email: string) {
-  const result = await db.execute({
+  const result = await getDb().execute({
     sql: "SELECT * FROM user WHERE email = ?",
     args: [email]
   });
@@ -77,7 +77,7 @@ export async function getUserByEmail(email: string) {
 }
 
 export async function getUserById(id: string) {
-  const result = await db.execute({
+  const result = await getDb().execute({
     sql: "SELECT * FROM user WHERE id = ?",
     args: [id]
   });
