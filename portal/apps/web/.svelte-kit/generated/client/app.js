@@ -7,18 +7,17 @@ export const nodes = [
 	() => import('./nodes/3'),
 	() => import('./nodes/4'),
 	() => import('./nodes/5'),
-	() => import('./nodes/6'),
-	() => import('./nodes/7')
+	() => import('./nodes/6')
 ];
 
-export const server_loads = [2];
+export const server_loads = [];
 
 export const dictionary = {
-		"/(app)": [3,[2]],
-		"/enroll": [4],
-		"/enter": [5],
-		"/spaces": [6],
-		"/verify": [7]
+		"/": [2],
+		"/enroll": [3],
+		"/enter": [4],
+		"/spaces": [5],
+		"/verify": [6]
 	};
 
 export const hooks = {

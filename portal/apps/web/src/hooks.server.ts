@@ -2,18 +2,24 @@ import { lucia } from "$lib/server/auth";
 import { initializeDatabase } from "$lib/server/db";
 import type { Handle } from "@sveltejs/kit";
 
-// Initialize database on first request
+// Track initialization
 let dbInitialized = false;
-async function ensureDbInitialized() {
-  if (!dbInitialized) {
-    await initializeDatabase();
-    dbInitialized = true;
-  }
-}
 
 export const handle: Handle = async ({ event, resolve }) => {
-  // Initialize database if needed
-  await ensureDbInitialized();
+  // Initialize database on first request if not already done
+  if (!dbInitialized) {
+    try {
+      await initializeDatabase();
+      dbInitialized = true;
+    } catch (error) {
+      console.error("Failed to initialize database:", error);
+    }
+  }
+  
+  // Skip auth for health check
+  if (event.url.pathname === '/api/health') {
+    return resolve(event);
+  }
   
   const sessionId = event.cookies.get(lucia.sessionCookieName);
   

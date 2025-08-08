@@ -8,7 +8,7 @@
       "_event-state.js",
       "_false.js",
       "_paths.js",
-      "_private.js"
+      "_environment.js"
     ]
   },
   "../../node_modules/.pnpm/@sveltejs+kit@2.27.3_@sveltejs+vite-plugin-svelte@5.1.1_svelte@5.38.0_vite@6.3.5_@types_862c592dc20f919d195ce815e0f4fb27/node_modules/@sveltejs/kit/src/runtime/components/svelte-5/error.svelte": {
@@ -23,12 +23,6 @@
       "_index.js"
     ]
   },
-  "../../node_modules/.pnpm/@sveltejs+kit@2.27.3_@sveltejs+vite-plugin-svelte@5.1.1_svelte@5.38.0_vite@6.3.5_@types_862c592dc20f919d195ce815e0f4fb27/node_modules/@sveltejs/kit/src/runtime/components/svelte-5/layout.svelte": {
-    "file": "entries/fallbacks/layout.svelte.js",
-    "name": "entries/fallbacks/layout.svelte",
-    "src": "../../node_modules/.pnpm/@sveltejs+kit@2.27.3_@sveltejs+vite-plugin-svelte@5.1.1_svelte@5.38.0_vite@6.3.5_@types_862c592dc20f919d195ce815e0f4fb27/node_modules/@sveltejs/kit/src/runtime/components/svelte-5/layout.svelte",
-    "isEntry": true
-  },
   "../../node_modules/.pnpm/@sveltejs+kit@2.27.3_@sveltejs+vite-plugin-svelte@5.1.1_svelte@5.38.0_vite@6.3.5_@types_862c592dc20f919d195ce815e0f4fb27/node_modules/@sveltejs/kit/src/runtime/server/index.js": {
     "file": "index.js",
     "name": "index",
@@ -40,8 +34,9 @@
       "_event-state.js",
       "_exports.js",
       "_index.js",
+      "_shared-server.js",
       "_internal.js",
-      "_private.js"
+      "_environment.js"
     ]
   },
   ".svelte-kit/generated/server/internal.js": {
@@ -51,8 +46,9 @@
     "isEntry": true,
     "imports": [
       "_internal.js",
-      "_private.js",
-      "_paths.js"
+      "_environment.js",
+      "_paths.js",
+      "_shared-server.js"
     ]
   },
   "_auth.js": {
@@ -66,11 +62,13 @@
     "file": "chunks/db.js",
     "name": "db",
     "imports": [
-      "_private.js"
-    ],
-    "dynamicImports": [
-      "_private.js"
+      "_environment.js",
+      "_shared-server.js"
     ]
+  },
+  "_environment.js": {
+    "file": "chunks/environment.js",
+    "name": "environment"
   },
   "_event-state.js": {
     "file": "chunks/event-state.js",
@@ -103,8 +101,9 @@
     "name": "internal",
     "imports": [
       "_index2.js",
-      "_private.js",
-      "_paths.js"
+      "_environment.js",
+      "_paths.js",
+      "_shared-server.js"
     ],
     "dynamicImports": [
       "src/hooks.server.ts"
@@ -114,10 +113,9 @@
     "file": "chunks/paths.js",
     "name": "paths"
   },
-  "_private.js": {
-    "file": "chunks/private.js",
-    "name": "private",
-    "isDynamicEntry": true
+  "_shared-server.js": {
+    "file": "chunks/shared-server.js",
+    "name": "shared-server"
   },
   "_state.svelte.js": {
     "file": "chunks/state.svelte.js",
@@ -148,26 +146,9 @@
     "src": "src/hooks.server.ts",
     "isDynamicEntry": true,
     "imports": [
-      "_auth.js"
-    ]
-  },
-  "src/routes/(app)/+layout.server.ts": {
-    "file": "entries/pages/(app)/_layout.server.ts.js",
-    "name": "entries/pages/(app)/_layout.server.ts",
-    "src": "src/routes/(app)/+layout.server.ts",
-    "isEntry": true
-  },
-  "src/routes/(app)/+page.svelte": {
-    "file": "entries/pages/(app)/_page.svelte.js",
-    "name": "entries/pages/(app)/_page.svelte",
-    "src": "src/routes/(app)/+page.svelte",
-    "isEntry": true,
-    "imports": [
-      "_index2.js",
-      "_index.js"
-    ],
-    "css": [
-      "_app/immutable/assets/_page.B_zaaS-_.css"
+      "_auth.js",
+      "_db.js",
+      "_environment.js"
     ]
   },
   "src/routes/+layout.svelte": {
@@ -179,7 +160,18 @@
       "_index2.js"
     ],
     "css": [
-      "_app/immutable/assets/_layout.DbRR4FQp.css"
+      "_app/immutable/assets/_layout.D5ZWiZwY.css"
+    ]
+  },
+  "src/routes/+page.svelte": {
+    "file": "entries/pages/_page.svelte.js",
+    "name": "entries/pages/_page.svelte",
+    "src": "src/routes/+page.svelte",
+    "isEntry": true,
+    "imports": [
+      "_index2.js",
+      "_exports.js",
+      "_state.svelte.js"
     ]
   },
   "src/routes/api/auth/check/+server.ts": {

@@ -10,7 +10,7 @@ return {
 	assets: new Set(["CNAME","favicon.svg"]),
 	mimeTypes: {".svg":"image/svg+xml"},
 	_: {
-		client: {start:"_app/immutable/entry/start.CyP7drSi.js",app:"_app/immutable/entry/app.C9cR3jiL.js",imports:["_app/immutable/entry/start.CyP7drSi.js","_app/immutable/chunks/B2YQ2Lh6.js","_app/immutable/chunks/BG-_DFpo.js","_app/immutable/chunks/DNCvQT6k.js","_app/immutable/chunks/CGy5WkS1.js","_app/immutable/entry/app.C9cR3jiL.js","_app/immutable/chunks/CEGKcvF7.js","_app/immutable/chunks/DNCvQT6k.js","_app/immutable/chunks/C3-GYWKS.js","_app/immutable/chunks/BG-_DFpo.js","_app/immutable/chunks/CGy5WkS1.js","_app/immutable/chunks/Bzak7iHL.js","_app/immutable/chunks/6KRrRGw_.js"],stylesheets:[],fonts:[],uses_env_dynamic_public:false},
+		client: {start:"_app/immutable/entry/start.B4SXjR0T.js",app:"_app/immutable/entry/app.CpGpB739.js",imports:["_app/immutable/entry/start.B4SXjR0T.js","_app/immutable/chunks/CzE9q_nh.js","_app/immutable/chunks/-m8yyuFF.js","_app/immutable/chunks/Dqv5hy1p.js","_app/immutable/entry/app.CpGpB739.js","_app/immutable/chunks/Dp1pzeXC.js","_app/immutable/chunks/Dqv5hy1p.js","_app/immutable/chunks/-m8yyuFF.js","_app/immutable/chunks/Bzak7iHL.js","_app/immutable/chunks/CUNwvT8l.js","_app/immutable/chunks/DT6yfO3p.js"],stylesheets:[],fonts:[],uses_env_dynamic_public:false},
 		nodes: [
 			__memo(() => import('./nodes/0.js')),
 			__memo(() => import('./nodes/1.js')),
@@ -18,18 +18,17 @@ return {
 			__memo(() => import('./nodes/3.js')),
 			__memo(() => import('./nodes/4.js')),
 			__memo(() => import('./nodes/5.js')),
-			__memo(() => import('./nodes/6.js')),
-			__memo(() => import('./nodes/7.js'))
+			__memo(() => import('./nodes/6.js'))
 		],
 		remotes: {
 			
 		},
 		routes: [
 			{
-				id: "/(app)",
-				pattern: /^\/?$/,
+				id: "/",
+				pattern: /^\/$/,
 				params: [],
-				page: { layouts: [0,2,], errors: [1,,], leaf: 3 },
+				page: { layouts: [0,], errors: [1,], leaf: 2 },
 				endpoint: null
 			},
 			{
@@ -78,28 +77,28 @@ return {
 				id: "/enroll",
 				pattern: /^\/enroll\/?$/,
 				params: [],
-				page: { layouts: [0,], errors: [1,], leaf: 4 },
+				page: { layouts: [0,], errors: [1,], leaf: 3 },
 				endpoint: null
 			},
 			{
 				id: "/enter",
 				pattern: /^\/enter\/?$/,
 				params: [],
-				page: { layouts: [0,], errors: [1,], leaf: 5 },
+				page: { layouts: [0,], errors: [1,], leaf: 4 },
 				endpoint: null
 			},
 			{
 				id: "/spaces",
 				pattern: /^\/spaces\/?$/,
 				params: [],
-				page: { layouts: [0,], errors: [1,], leaf: 6 },
+				page: { layouts: [0,], errors: [1,], leaf: 5 },
 				endpoint: null
 			},
 			{
 				id: "/verify",
 				pattern: /^\/verify\/?$/,
 				params: [],
-				page: { layouts: [0,], errors: [1,], leaf: 7 },
+				page: { layouts: [0,], errors: [1,], leaf: 6 },
 				endpoint: null
 			}
 		],

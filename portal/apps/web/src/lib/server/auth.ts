@@ -1,11 +1,15 @@
 import { Lucia } from "lucia";
 import { LibsqlAdapter } from "./lucia-libsql-adapter";
-import db from "./db";
+import { getDb } from "./db";
 import type { RequestEvent } from "@sveltejs/kit";
 
-const adapter = new LibsqlAdapter(db);
+// Lazy initialization to avoid creating client at build time
+let luciaInstance: Lucia | null = null;
 
-export const lucia = new Lucia(adapter, {
+function getLucia(): Lucia {
+  if (!luciaInstance) {
+    const adapter = new LibsqlAdapter(getDb());
+    luciaInstance = new Lucia(adapter, {
   sessionCookie: {
     attributes: {
       secure: true,
@@ -19,11 +23,23 @@ export const lucia = new Lucia(adapter, {
       avatarUrl: attributes.avatar_url
     };
   }
-});
+    });
+  }
+  return luciaInstance;
+}
+
+export const lucia = {
+  get sessionCookieName() { return getLucia().sessionCookieName; },
+  validateSession: (...args: Parameters<Lucia["validateSession"]>) => getLucia().validateSession(...args),
+  createSession: (...args: Parameters<Lucia["createSession"]>) => getLucia().createSession(...args),
+  invalidateSession: (...args: Parameters<Lucia["invalidateSession"]>) => getLucia().invalidateSession(...args),
+  createSessionCookie: (...args: Parameters<Lucia["createSessionCookie"]>) => getLucia().createSessionCookie(...args),
+  createBlankSessionCookie: (...args: Parameters<Lucia["createBlankSessionCookie"]>) => getLucia().createBlankSessionCookie(...args)
+};
 
 declare module "lucia" {
   interface Register {
-    Lucia: typeof lucia;
+    Lucia: Lucia;
     DatabaseUserAttributes: DatabaseUserAttributes;
   }
 }

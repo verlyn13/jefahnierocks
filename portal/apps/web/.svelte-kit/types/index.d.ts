@@ -3,7 +3,6 @@ type DynamicRoutes = {
 };
 
 type Layouts = {
-	"/(app)": undefined;
 	"/": undefined;
 	"/api": undefined;
 	"/api/auth": undefined;
@@ -22,7 +21,7 @@ type Layouts = {
 	"/verify": undefined
 };
 
-export type RouteId = "/(app)" | "/" | "/api" | "/api/auth" | "/api/auth/check" | "/api/auth/register" | "/api/webauthn" | "/api/webauthn/login" | "/api/webauthn/login/finish" | "/api/webauthn/login/start" | "/api/webauthn/register" | "/api/webauthn/register/finish" | "/api/webauthn/register/start" | "/enroll" | "/enter" | "/spaces" | "/verify";
+export type RouteId = "/" | "/api" | "/api/auth" | "/api/auth/check" | "/api/auth/register" | "/api/webauthn" | "/api/webauthn/login" | "/api/webauthn/login/finish" | "/api/webauthn/login/start" | "/api/webauthn/register" | "/api/webauthn/register/finish" | "/api/webauthn/register/start" | "/enroll" | "/enter" | "/spaces" | "/verify";
 
 export type RouteParams<T extends RouteId> = T extends keyof DynamicRoutes ? DynamicRoutes[T] : Record<string, never>;
 

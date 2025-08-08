@@ -1,4 +1,4 @@
-import { clsx as clsx$1 } from "clsx";
+import "clsx";
 import { B as BROWSER } from "./false.js";
 var is_array = Array.isArray;
 var index_of = Array.prototype.indexOf;
@@ -24,15 +24,6 @@ function deferred() {
     reject = rej;
   });
   return { promise, resolve, reject };
-}
-function fallback(value, fallback2, lazy = false) {
-  return value === void 0 ? lazy ? (
-    /** @type {() => V} */
-    fallback2()
-  ) : (
-    /** @type {V} */
-    fallback2
-  ) : value;
 }
 function equals(value) {
   return value === this.v;
@@ -105,8 +96,6 @@ function state_unsafe_mutation() {
 const HYDRATION_START = "[";
 const HYDRATION_END = "]";
 const HYDRATION_ERROR = {};
-const ELEMENT_IS_NAMESPACED = 1;
-const ELEMENT_PRESERVE_ATTRIBUTE_CASE = 1 << 1;
 const UNINITIALIZED = Symbol();
 let tracing_mode_flag = false;
 let component_context = null;
@@ -1593,75 +1582,6 @@ const STATUS_MASK = -7169;
 function set_signal_status(signal, status) {
   signal.f = signal.f & STATUS_MASK | status;
 }
-const VOID_ELEMENT_NAMES = [
-  "area",
-  "base",
-  "br",
-  "col",
-  "command",
-  "embed",
-  "hr",
-  "img",
-  "input",
-  "keygen",
-  "link",
-  "meta",
-  "param",
-  "source",
-  "track",
-  "wbr"
-];
-function is_void(name) {
-  return VOID_ELEMENT_NAMES.includes(name) || name.toLowerCase() === "!doctype";
-}
-const DOM_BOOLEAN_ATTRIBUTES = [
-  "allowfullscreen",
-  "async",
-  "autofocus",
-  "autoplay",
-  "checked",
-  "controls",
-  "default",
-  "disabled",
-  "formnovalidate",
-  "hidden",
-  "indeterminate",
-  "inert",
-  "ismap",
-  "loop",
-  "multiple",
-  "muted",
-  "nomodule",
-  "novalidate",
-  "open",
-  "playsinline",
-  "readonly",
-  "required",
-  "reversed",
-  "seamless",
-  "selected",
-  "webkitdirectory",
-  "defer",
-  "disablepictureinpicture",
-  "disableremoteplayback"
-];
-function is_boolean_attribute(name) {
-  return DOM_BOOLEAN_ATTRIBUTES.includes(name);
-}
-const PASSIVE_EVENTS = ["touchstart", "touchmove"];
-function is_passive_event(name) {
-  return PASSIVE_EVENTS.includes(name);
-}
-const RAW_TEXT_ELEMENTS = (
-  /** @type {const} */
-  ["textarea", "script", "style", "title"]
-);
-function is_raw_text_element(name) {
-  return RAW_TEXT_ELEMENTS.includes(
-    /** @type {RAW_TEXT_ELEMENTS[number]} */
-    name
-  );
-}
 const ATTR_REGEX = /[&"<]/g;
 const CONTENT_REGEX = /[&<]/g;
 function escape_html(value, is_attr) {
@@ -1690,13 +1610,6 @@ function attr(name, value, is_boolean = false) {
   const assignment = is_boolean ? "" : `="${escape_html(normalized, true)}"`;
   return ` ${name}${assignment}`;
 }
-function clsx(value) {
-  if (typeof value === "object") {
-    return clsx$1(value);
-  } else {
-    return value ?? "";
-  }
-}
 function to_class(value, hash, directives) {
   var classname = value == null ? "" : "" + value;
   if (hash) {
@@ -1704,103 +1617,12 @@ function to_class(value, hash, directives) {
   }
   return classname === "" ? null : classname;
 }
-function append_styles(styles, important = false) {
-  var separator = important ? " !important;" : ";";
-  var css = "";
-  for (var key in styles) {
-    var value = styles[key];
-    if (value != null && value !== "") {
-      css += " " + key + ": " + value + separator;
-    }
-  }
-  return css;
-}
-function to_css_name(name) {
-  if (name[0] !== "-" || name[1] !== "-") {
-    return name.toLowerCase();
-  }
-  return name;
-}
 function to_style(value, styles) {
-  if (styles) {
-    var new_style = "";
-    var normal_styles;
-    var important_styles;
-    if (Array.isArray(styles)) {
-      normal_styles = styles[0];
-      important_styles = styles[1];
-    } else {
-      normal_styles = styles;
-    }
-    if (value) {
-      value = String(value).replaceAll(/\s*\/\*.*?\*\/\s*/g, "").trim();
-      var in_str = false;
-      var in_apo = 0;
-      var in_comment = false;
-      var reserved_names = [];
-      if (normal_styles) {
-        reserved_names.push(...Object.keys(normal_styles).map(to_css_name));
-      }
-      if (important_styles) {
-        reserved_names.push(...Object.keys(important_styles).map(to_css_name));
-      }
-      var start_index = 0;
-      var name_index = -1;
-      const len = value.length;
-      for (var i = 0; i < len; i++) {
-        var c = value[i];
-        if (in_comment) {
-          if (c === "/" && value[i - 1] === "*") {
-            in_comment = false;
-          }
-        } else if (in_str) {
-          if (in_str === c) {
-            in_str = false;
-          }
-        } else if (c === "/" && value[i + 1] === "*") {
-          in_comment = true;
-        } else if (c === '"' || c === "'") {
-          in_str = c;
-        } else if (c === "(") {
-          in_apo++;
-        } else if (c === ")") {
-          in_apo--;
-        }
-        if (!in_comment && in_str === false && in_apo === 0) {
-          if (c === ":" && name_index === -1) {
-            name_index = i;
-          } else if (c === ";" || i === len - 1) {
-            if (name_index !== -1) {
-              var name = to_css_name(value.substring(start_index, name_index).trim());
-              if (!reserved_names.includes(name)) {
-                if (c !== ";") {
-                  i++;
-                }
-                var property = value.substring(start_index, i).trim();
-                new_style += " " + property + ";";
-              }
-            }
-            start_index = i + 1;
-            name_index = -1;
-          }
-        }
-      }
-    }
-    if (normal_styles) {
-      new_style += append_styles(normal_styles);
-    }
-    if (important_styles) {
-      new_style += append_styles(important_styles, true);
-    }
-    new_style = new_style.trim();
-    return new_style === "" ? null : new_style;
-  }
   return value == null ? null : String(value);
 }
 function subscribe_to_store(store, run, invalidate) {
   if (store == null) {
     run(void 0);
-    if (invalidate) invalidate(void 0);
     return noop;
   }
   const unsub = untrack(
@@ -1858,7 +1680,6 @@ function get_parent_context(component_context2) {
 }
 const BLOCK_OPEN = `<!--${HYDRATION_START}-->`;
 const BLOCK_CLOSE = `<!--${HYDRATION_END}-->`;
-const EMPTY_COMMENT = `<!---->`;
 class HeadPayload {
   /** @type {Set<{ hash: string; code: string }>} */
   css = /* @__PURE__ */ new Set();
@@ -1886,24 +1707,6 @@ class Payload {
     this.head.uid = this.uid;
   }
 }
-function copy_payload({ out, css, head, uid }) {
-  const payload = new Payload();
-  payload.out = [...out];
-  payload.css = new Set(css);
-  payload.uid = uid;
-  payload.head = new HeadPayload();
-  payload.head.out = [...head.out];
-  payload.head.css = new Set(head.css);
-  payload.head.title = head.title;
-  payload.head.uid = head.uid;
-  return payload;
-}
-function assign_payload(p1, p2) {
-  p1.out = [...p2.out];
-  p1.css = p2.css;
-  p1.head = p2.head;
-  p1.uid = p2.uid;
-}
 function props_id_generator(prefix) {
   let uid = 1;
   return () => `${prefix}s${uid++}`;
@@ -1916,23 +1719,6 @@ let controller = null;
 function abort() {
   controller?.abort(STALE_REACTION);
   controller = null;
-}
-const INVALID_ATTR_NAME_CHAR_REGEX = /[\s'">/=\u{FDD0}-\u{FDEF}\u{FFFE}\u{FFFF}\u{1FFFE}\u{1FFFF}\u{2FFFE}\u{2FFFF}\u{3FFFE}\u{3FFFF}\u{4FFFE}\u{4FFFF}\u{5FFFE}\u{5FFFF}\u{6FFFE}\u{6FFFF}\u{7FFFE}\u{7FFFF}\u{8FFFE}\u{8FFFF}\u{9FFFE}\u{9FFFF}\u{AFFFE}\u{AFFFF}\u{BFFFE}\u{BFFFF}\u{CFFFE}\u{CFFFF}\u{DFFFE}\u{DFFFF}\u{EFFFE}\u{EFFFF}\u{FFFFE}\u{FFFFF}\u{10FFFE}\u{10FFFF}]/u;
-function element(payload, tag, attributes_fn = noop, children_fn = noop) {
-  payload.out.push("<!---->");
-  if (tag) {
-    payload.out.push(`<${tag}`);
-    attributes_fn();
-    payload.out.push(`>`);
-    if (!is_void(tag)) {
-      children_fn();
-      if (!is_raw_text_element(tag)) {
-        payload.out.push(EMPTY_COMMENT);
-      }
-      payload.out.push(`</${tag}>`);
-    }
-  }
-  payload.out.push("<!---->");
 }
 let on_destroy = [];
 function render(component, options = {}) {
@@ -1971,42 +1757,6 @@ function render(component, options = {}) {
     abort();
   }
 }
-function spread_attributes(attrs, css_hash, classes, styles, flags = 0) {
-  if (attrs.class) {
-    attrs.class = clsx(attrs.class);
-  }
-  let attr_str = "";
-  let name;
-  const is_html = (flags & ELEMENT_IS_NAMESPACED) === 0;
-  const lowercase = (flags & ELEMENT_PRESERVE_ATTRIBUTE_CASE) === 0;
-  for (name in attrs) {
-    if (typeof attrs[name] === "function") continue;
-    if (name[0] === "$" && name[1] === "$") continue;
-    if (INVALID_ATTR_NAME_CHAR_REGEX.test(name)) continue;
-    var value = attrs[name];
-    if (lowercase) {
-      name = name.toLowerCase();
-    }
-    attr_str += attr(name, value, is_html && is_boolean_attribute(name));
-  }
-  return attr_str;
-}
-function spread_props(props) {
-  const merged_props = {};
-  let key;
-  for (let i = 0; i < props.length; i++) {
-    const obj = props[i];
-    for (key in obj) {
-      const desc = Object.getOwnPropertyDescriptor(obj, key);
-      if (desc) {
-        Object.defineProperty(merged_props, key, desc);
-      } else {
-        merged_props[key] = obj[key];
-      }
-    }
-  }
-  return merged_props;
-}
 function stringify(value) {
   return typeof value === "string" ? value : value == null ? "" : value + "";
 }
@@ -2015,7 +1765,7 @@ function attr_class(value, hash, directives) {
   return result ? ` class="${escape_html(result, true)}"` : "";
 }
 function attr_style(value, directives) {
-  var result = to_style(value, directives);
+  var result = to_style(value);
   return result ? ` style="${escape_html(result, true)}"` : "";
 }
 function store_get(store_values, store_name, store) {
@@ -2046,37 +1796,6 @@ function slot(payload, $$props, name, slot_props, fallback_fn) {
     slot_fn(payload, slot_props);
   }
 }
-function rest_props(props, rest) {
-  const rest_props2 = {};
-  let key;
-  for (key in props) {
-    if (!rest.includes(key)) {
-      rest_props2[key] = props[key];
-    }
-  }
-  return rest_props2;
-}
-function sanitize_props(props) {
-  const { children, $$slots, ...sanitized } = props;
-  return sanitized;
-}
-function sanitize_slots(props) {
-  const sanitized = {};
-  if (props.children) sanitized.default = true;
-  for (const key in props.$$slots) {
-    sanitized[key] = true;
-  }
-  return sanitized;
-}
-function bind_props(props_parent, props_now) {
-  for (const key in props_now) {
-    const initial_value = props_parent[key];
-    const value = props_now[key];
-    if (initial_value === void 0 && value !== void 0 && Object.getOwnPropertyDescriptor(props_parent, key)?.set) {
-      props_parent[key] = value;
-    }
-  }
-}
 function ensure_array_like(array_like_or_iterator) {
   if (array_like_or_iterator) {
     return array_like_or_iterator.length !== void 0 ? array_like_or_iterator : Array.from(array_like_or_iterator);
@@ -2084,61 +1803,47 @@ function ensure_array_like(array_like_or_iterator) {
   return [];
 }
 export {
-  spread_props as $,
-  HYDRATION_END as A,
-  hydration_failed as B,
+  setContext as A,
+  pop as B,
   COMMENT_NODE as C,
-  clear_text_content as D,
-  array_from as E,
-  component_root as F,
-  is_passive_event as G,
+  slot as D,
+  getContext as E,
+  escape_html as F,
+  noop as G,
   HYDRATION_ERROR as H,
-  create_text as I,
-  branch as J,
-  push$1 as K,
-  component_context as L,
-  pop$1 as M,
-  set as N,
-  LEGACY_PROPS as O,
-  get as P,
-  flushSync as Q,
-  mutable_source as R,
-  render as S,
-  setContext as T,
-  sanitize_props as U,
-  rest_props as V,
-  fallback as W,
-  spread_attributes as X,
-  clsx as Y,
-  element as Z,
-  bind_props as _,
-  subscribe_to_store as a,
-  sanitize_slots as a0,
-  copy_payload as a1,
-  assign_payload as a2,
-  store_get as b,
-  attr_class as c,
-  attr as d,
-  ensure_array_like as e,
-  push as f,
-  stringify as g,
-  attr_style as h,
-  escape_html as i,
-  getContext as j,
-  slot as k,
-  get_next_sibling as l,
-  define_property as m,
-  noop as n,
-  set_active_reaction as o,
-  pop as p,
-  set_active_effect as q,
-  run_all as r,
-  safe_not_equal as s,
-  is_array as t,
-  unsubscribe_stores as u,
-  active_effect as v,
-  active_reaction as w,
-  init_operations as x,
-  get_first_child as y,
-  HYDRATION_START as z
+  safe_not_equal as I,
+  store_get as J,
+  ensure_array_like as K,
+  LEGACY_PROPS as L,
+  attr_class as M,
+  attr as N,
+  unsubscribe_stores as O,
+  stringify as P,
+  attr_style as Q,
+  set_active_effect as a,
+  active_effect as b,
+  active_reaction as c,
+  define_property as d,
+  init_operations as e,
+  get_first_child as f,
+  get_next_sibling as g,
+  HYDRATION_START as h,
+  is_array as i,
+  HYDRATION_END as j,
+  hydration_failed as k,
+  clear_text_content as l,
+  array_from as m,
+  component_root as n,
+  create_text as o,
+  branch as p,
+  push$1 as q,
+  component_context as r,
+  set_active_reaction as s,
+  pop$1 as t,
+  set as u,
+  get as v,
+  flushSync as w,
+  mutable_source as x,
+  render as y,
+  push as z
 };

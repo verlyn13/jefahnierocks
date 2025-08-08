@@ -1,8 +1,4 @@
 {
-	"/(app)": [
-		"src/routes/(app)/+layout.server.ts",
-		"src/routes/(app)/+layout.server.ts"
-	],
 	"/": [],
 	"/api/auth/check": [
 		"src/routes/api/auth/check/+server.ts"

@@ -1,6 +1,0 @@
-{
-  "buildCommand": "cd ../.. && pnpm --filter @portal/web build",
-  "installCommand": "cd ../.. && pnpm install",
-  "framework": "sveltekit",
-  "outputDirectory": ".svelte-kit"
-}

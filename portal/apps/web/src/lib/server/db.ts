@@ -4,13 +4,23 @@ import { env } from "$env/dynamic/private";
 
 // Lazy database client
 let db: Client | null = null;
+let initialized = false;
 
-function getDb(): Client {
+export function getDb(): Client {
 	if (!db) {
+		const isProd = process.env.NODE_ENV === "production";
+		// Trim whitespace from environment variables to fix "Invalid URL" error
+		const url = env.TURSO_DATABASE_URL?.trim();
+		const authToken = env.TURSO_AUTH_TOKEN?.trim();
+		
+		if (isProd && (!url || !url.startsWith("libsql://"))) {
+			throw new Error("In production, TURSO_DATABASE_URL (libsql://...) is required.");
+		}
+		
 		// Only create the client when actually needed
 		db = createClient({
-			url: env.TURSO_DATABASE_URL || "file:portal.db",
-			authToken: env.TURSO_AUTH_TOKEN
+			url: url || "file:portal.db",
+			authToken: authToken
 		});
 	}
 	return db;
@@ -18,7 +28,8 @@ function getDb(): Client {
 
 // Export a function to initialize the database
 export async function initializeDatabase() {
-	if (building) return; // Don't initialize during build
+	if (building || initialized) return; // Don't initialize during build or if already done
+	initialized = true;
 	
 	const database = getDb();
 	
@@ -125,13 +136,3 @@ export async function initializeDatabase() {
 		// Continue even if tables exist
 	}
 }
-
-// Export a proxy that creates the client lazily
-const dbProxy = new Proxy({} as Client, {
-	get(_target, prop, receiver) {
-		const database = getDb();
-		return Reflect.get(database, prop, receiver);
-	}
-});
-
-export default dbProxy;
