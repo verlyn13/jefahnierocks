@@ -3,31 +3,24 @@
   import { goto } from "$app/navigation";
   import { onMount } from "svelte";
   import CommandPalette from "$lib/components/CommandPalette.svelte";
+  import type { PageData } from "./$types";
+  import { pillars } from "$lib/seed";
   
-  const spaceData: Record<string, any> = {
-    family: {
-      name: "Jefahnie Family",
-      color: "from-cyan-500 to-blue-600",
-      description: "Our family's digital home",
-      features: ["messages", "calendar", "photos", "promises"]
-    },
-    projects: {
-      name: "Personal Projects", 
-      color: "from-purple-500 to-pink-600",
-      description: "Track and manage your projects",
-      features: ["tasks", "notes", "timeline", "resources"]
-    }
+  export let data: PageData;
+  
+  $: space = {
+    ...data.space,
+    color: data.space.slug === "family" ? "from-cyan-500 to-blue-600" : "from-purple-500 to-pink-600",
+    description: data.space.slug === "family" ? "Our family's digital home" : "Track and manage your projects"
   };
   
-  $: slug = $page.params.slug;
-  $: space = spaceData[slug] || spaceData.family;
-  
   let activeTab = "overview";
-  let messages: any[] = [];
+  let messages = data.messages || [];
   let newMessage = "";
-  let promises: any[] = [];
+  let promises = data.promises || [];
   let commandPaletteOpen = false;
   let searchItems: any[] = [];
+  let isLoading = false;
   
   // Connect to keyboard shortcut
   function handleKeydown(e: KeyboardEvent) {
@@ -37,30 +30,27 @@
     }
   }
   
+  let pollInterval: any;
+  
   onMount(() => {
-    // Load space data
-    loadSpaceData();
+    // Setup command palette items
+    setupSearchItems();
     window.addEventListener('keydown', handleKeydown);
-    return () => window.removeEventListener('keydown', handleKeydown);
+    
+    // Poll for new messages every 5 seconds when on messages tab
+    pollInterval = setInterval(() => {
+      if (activeTab === "messages") {
+        fetchLatestMessages();
+      }
+    }, 5000);
+    
+    return () => {
+      window.removeEventListener('keydown', handleKeydown);
+      if (pollInterval) clearInterval(pollInterval);
+    };
   });
   
-  async function loadSpaceData() {
-    // Mock data integrating family concepts with portal pillars
-    messages = [
-      { id: 1, author: "System", text: "Welcome to the family space!", time: "Just now", avatar: "🤖" },
-      { id: 2, author: "You", text: "Testing the new portal!", time: "2 min ago", avatar: "👤" }
-    ];
-    
-    // Family-oriented promises/commitments
-    promises = [
-      { id: 1, title: "Family Dinner", date: "Sunday 6pm", status: "upcoming", icon: "🍽️", pillar: "people" },
-      { id: 2, title: "Movie Night", date: "Friday 8pm", status: "upcoming", icon: "🎬", pillar: "people" },
-      { id: 3, title: "Beach Trip", date: "Next Month", status: "planning", icon: "🏖️", pillar: "people" },
-      { id: 4, title: "Help with Homework", date: "Daily 4pm", status: "recurring", icon: "📚", pillar: "teach" },
-      { id: 5, title: "Garden Together", date: "Weekend", status: "planning", icon: "🌱", pillar: "build" }
-    ];
-    
-    // Setup search items for command palette
+  function setupSearchItems() {
     searchItems = [
       { title: "New Message", action: () => activeTab = "messages" },
       { title: "Add Promise", action: () => activeTab = "promises" },
@@ -75,17 +65,84 @@
   }
   
   async function sendMessage() {
-    if (!newMessage.trim()) return;
+    if (!newMessage.trim() || isLoading) return;
     
-    messages = [...messages, {
-      id: messages.length + 1,
-      author: "You",
-      text: newMessage,
-      time: "Just now",
-      avatar: "👤"
-    }];
+    isLoading = true;
+    try {
+      const response = await fetch("/api/spaces/" + data.space.id + "/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ content: newMessage })
+      });
+      
+      if (response.ok) {
+        const { message } = await response.json();
+        messages = [...messages, {
+          id: message.id,
+          author_name: message.author_name || data.user.name,
+          content: message.content,
+          created_at: message.created_at,
+          author_email: message.author_email
+        }];
+        newMessage = "";
+      }
+    } catch (error) {
+      console.error("Failed to send message:", error);
+    } finally {
+      isLoading = false;
+    }
+  }
+  
+  async function addPromise() {
+    const title = prompt("Promise title:");
+    if (!title) return;
     
-    newMessage = "";
+    const pillarOptions = pillars.map(p => p.id).join(", ");
+    const pillarId = prompt("Pillar (" + pillarOptions + "):") || "people";
+    const icon = prompt("Icon (emoji):") || "🎯";
+    
+    try {
+      const response = await fetch("/api/spaces/" + data.space.id + "/promises", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title, pillar_id: pillarId, icon })
+      });
+      
+      if (response.ok) {
+        const { promise } = await response.json();
+        promises = [...promises, promise];
+      }
+    } catch (error) {
+      console.error("Failed to add promise:", error);
+    }
+  }
+  
+  function formatTime(timestamp: number) {
+    const date = new Date(timestamp * 1000);
+    const now = new Date();
+    const diff = now.getTime() - date.getTime();
+    const minutes = Math.floor(diff / 60000);
+    const hours = Math.floor(diff / 3600000);
+    const days = Math.floor(diff / 86400000);
+    
+    if (minutes < 1) return "Just now";
+    if (minutes < 60) return minutes + " min ago";
+    if (hours < 24) return hours + " hour" + (hours > 1 ? 's' : '') + " ago";
+    return days + " day" + (days > 1 ? 's' : '') + " ago";
+  }
+  
+  async function fetchLatestMessages() {
+    try {
+      const response = await fetch("/api/spaces/" + data.space.id + "/messages");
+      if (response.ok) {
+        const { messages: newMessages } = await response.json();
+        if (newMessages.length > messages.length) {
+          messages = newMessages.reverse(); // API returns newest first
+        }
+      }
+    } catch (error) {
+      console.error("Failed to fetch messages:", error);
+    }
   }
   
   function handleMessageKeydown(e: KeyboardEvent) {
@@ -194,10 +251,10 @@
           <div class="space-y-3">
             {#each messages.slice(-3) as msg}
               <div class="flex gap-3">
-                <div class="text-2xl">{msg.avatar}</div>
+                <div class="text-2xl">{msg.author_email?.includes('jeffrey') ? '👨' : '👩'}</div>
                 <div class="flex-1">
-                  <p class="text-white/80">{msg.author}: {msg.text}</p>
-                  <p class="text-white/40 text-sm">{msg.time}</p>
+                  <p class="text-white/80">{msg.author_name}: {msg.content}</p>
+                  <p class="text-white/40 text-sm">{formatTime(msg.created_at)}</p>
                 </div>
               </div>
             {/each}
@@ -208,12 +265,14 @@
         <div class="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/10">
           <h2 class="text-xl font-semibold text-white mb-4">Upcoming</h2>
           <div class="space-y-3">
-            {#each promises as promise}
+            {#each promises.slice(0, 5) as promise}
               <div class="flex items-center gap-3">
-                <div class="text-2xl">{promise.icon}</div>
+                <div class="text-2xl">{promise.icon || '🎯'}</div>
                 <div>
                   <p class="text-white/80">{promise.title}</p>
-                  <p class="text-white/40 text-sm">{promise.date}</p>
+                  <p class="text-white/40 text-sm">
+                    {promise.due_date ? new Date(promise.due_date).toLocaleDateString() : 'No due date'}
+                  </p>
                 </div>
               </div>
             {/each}
@@ -230,11 +289,11 @@
           <div class="h-96 overflow-y-auto p-6 space-y-4">
             {#each messages as msg}
               <div class="flex gap-3">
-                <div class="text-2xl">{msg.avatar}</div>
+                <div class="text-2xl">{msg.author_email?.includes('jeffrey') ? '👨' : '👩'}</div>
                 <div class="flex-1">
                   <div class="bg-white/10 rounded-lg p-3">
-                    <p class="text-white/60 text-sm mb-1">{msg.author} • {msg.time}</p>
-                    <p class="text-white">{msg.text}</p>
+                    <p class="text-white/60 text-sm mb-1">{msg.author_name} • {formatTime(msg.created_at)}</p>
+                    <p class="text-white">{msg.content}</p>
                   </div>
                 </div>
               </div>
@@ -276,7 +335,9 @@
             {/each}
             
             <!-- Add New -->
-            <button class="bg-white/5 backdrop-blur-lg rounded-xl p-6 border border-white/10 border-dashed hover:bg-white/10 transition-colors">
+            <button 
+              on:click={addPromise}
+              class="bg-white/5 backdrop-blur-lg rounded-xl p-6 border border-white/10 border-dashed hover:bg-white/10 transition-colors">
               <div class="text-4xl mb-3 opacity-50">➕</div>
               <h3 class="text-white/60">Add Promise</h3>
             </button>

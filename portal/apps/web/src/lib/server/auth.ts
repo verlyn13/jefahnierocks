@@ -56,6 +56,11 @@ export async function createUser(email: string, name?: string) {
     sql: "INSERT INTO user (id, email, name) VALUES (?, ?, ?)",
     args: [userId, email, name || email.split("@")[0]]
   });
+  
+  // Import spaces helper and ensure default spaces for new user
+  const { ensureDefaultSpaces } = await import("./spaces");
+  await ensureDefaultSpaces(userId);
+  
   return userId;
 }
 

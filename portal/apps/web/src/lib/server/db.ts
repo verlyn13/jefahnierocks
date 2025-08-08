@@ -124,6 +124,62 @@ export async function initializeDatabase() {
 		  )
 		`);
 
+		// Family activity tables
+		await database.execute(`
+		  CREATE TABLE IF NOT EXISTS message (
+		    id TEXT PRIMARY KEY,
+		    space_id TEXT NOT NULL REFERENCES space(id) ON DELETE CASCADE,
+		    user_id TEXT NOT NULL REFERENCES user(id) ON DELETE CASCADE,
+		    content TEXT NOT NULL,
+		    parent_id TEXT REFERENCES message(id) ON DELETE CASCADE,
+		    created_at INTEGER NOT NULL DEFAULT (unixepoch()),
+		    updated_at INTEGER
+		  )
+		`);
+
+		await database.execute(`
+		  CREATE TABLE IF NOT EXISTS promise (
+		    id TEXT PRIMARY KEY,
+		    space_id TEXT NOT NULL REFERENCES space(id) ON DELETE CASCADE,
+		    user_id TEXT NOT NULL REFERENCES user(id) ON DELETE CASCADE,
+		    title TEXT NOT NULL,
+		    description TEXT,
+		    pillar_id TEXT NOT NULL,
+		    due_date INTEGER,
+		    status TEXT NOT NULL CHECK (status IN ('pending', 'in_progress', 'completed', 'cancelled')),
+		    icon TEXT,
+		    created_at INTEGER NOT NULL DEFAULT (unixepoch()),
+		    completed_at INTEGER
+		  )
+		`);
+
+		await database.execute(`
+		  CREATE TABLE IF NOT EXISTS calendar_event (
+		    id TEXT PRIMARY KEY,
+		    space_id TEXT NOT NULL REFERENCES space(id) ON DELETE CASCADE,
+		    user_id TEXT NOT NULL REFERENCES user(id) ON DELETE CASCADE,
+		    title TEXT NOT NULL,
+		    description TEXT,
+		    start_time INTEGER NOT NULL,
+		    end_time INTEGER,
+		    recurring_pattern TEXT,
+		    color TEXT,
+		    created_at INTEGER NOT NULL DEFAULT (unixepoch())
+		  )
+		`);
+
+		await database.execute(`
+		  CREATE TABLE IF NOT EXISTS node (
+		    id TEXT PRIMARY KEY,
+		    space_id TEXT NOT NULL REFERENCES space(id) ON DELETE CASCADE,
+		    pillar_id TEXT NOT NULL,
+		    title TEXT NOT NULL,
+		    kind TEXT NOT NULL CHECK (kind IN ('app', 'doc', 'space', 'thread', 'data')),
+		    activity REAL NOT NULL DEFAULT 0,
+		    updated_at INTEGER NOT NULL DEFAULT (unixepoch())
+		  )
+		`);
+
 		// Create indexes
 		await database.execute(`CREATE INDEX IF NOT EXISTS idx_session_user_id ON session(user_id)`);
 		await database.execute(`CREATE INDEX IF NOT EXISTS idx_credential_user_id ON credential(user_id)`);
@@ -131,6 +187,10 @@ export async function initializeDatabase() {
 		await database.execute(`CREATE INDEX IF NOT EXISTS idx_membership_space_id ON membership(space_id)`);
 		await database.execute(`CREATE INDEX IF NOT EXISTS idx_invite_email ON invite(email)`);
 		await database.execute(`CREATE INDEX IF NOT EXISTS idx_magic_link_email ON magic_link(email)`);
+		await database.execute(`CREATE INDEX IF NOT EXISTS idx_message_space_id ON message(space_id)`);
+		await database.execute(`CREATE INDEX IF NOT EXISTS idx_promise_space_id ON promise(space_id)`);
+		await database.execute(`CREATE INDEX IF NOT EXISTS idx_calendar_event_space_id ON calendar_event(space_id)`);
+		await database.execute(`CREATE INDEX IF NOT EXISTS idx_node_space_id ON node(space_id)`); 
 	} catch (error) {
 		console.error("Database initialization error:", error);
 		// Continue even if tables exist

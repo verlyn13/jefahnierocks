@@ -10,7 +10,7 @@ return {
 	assets: new Set(["CNAME","favicon.svg"]),
 	mimeTypes: {".svg":"image/svg+xml"},
 	_: {
-		client: {start:"_app/immutable/entry/start.B4SXjR0T.js",app:"_app/immutable/entry/app.CpGpB739.js",imports:["_app/immutable/entry/start.B4SXjR0T.js","_app/immutable/chunks/CzE9q_nh.js","_app/immutable/chunks/-m8yyuFF.js","_app/immutable/chunks/Dqv5hy1p.js","_app/immutable/entry/app.CpGpB739.js","_app/immutable/chunks/Dp1pzeXC.js","_app/immutable/chunks/Dqv5hy1p.js","_app/immutable/chunks/-m8yyuFF.js","_app/immutable/chunks/Bzak7iHL.js","_app/immutable/chunks/CUNwvT8l.js","_app/immutable/chunks/DT6yfO3p.js"],stylesheets:[],fonts:[],uses_env_dynamic_public:false},
+		client: {start:"_app/immutable/entry/start.Bj-InbuE.js",app:"_app/immutable/entry/app.D1qBglzx.js",imports:["_app/immutable/entry/start.Bj-InbuE.js","_app/immutable/chunks/Co0hM7nt.js","_app/immutable/chunks/DjZzcfPQ.js","_app/immutable/chunks/gpp4IOM_.js","_app/immutable/chunks/C6Dy3d1M.js","_app/immutable/entry/app.D1qBglzx.js","_app/immutable/chunks/Dp1pzeXC.js","_app/immutable/chunks/gpp4IOM_.js","_app/immutable/chunks/DjZzcfPQ.js","_app/immutable/chunks/C6Dy3d1M.js","_app/immutable/chunks/Bzak7iHL.js","_app/immutable/chunks/xhIG3T10.js","_app/immutable/chunks/Bvt_Lap0.js","_app/immutable/chunks/Drr5YdnY.js"],stylesheets:[],fonts:[],uses_env_dynamic_public:false},
 		nodes: [
 			__memo(() => import('./nodes/0.js')),
 			__memo(() => import('./nodes/1.js')),
@@ -18,7 +18,12 @@ return {
 			__memo(() => import('./nodes/3.js')),
 			__memo(() => import('./nodes/4.js')),
 			__memo(() => import('./nodes/5.js')),
-			__memo(() => import('./nodes/6.js'))
+			__memo(() => import('./nodes/6.js')),
+			__memo(() => import('./nodes/7.js')),
+			__memo(() => import('./nodes/8.js')),
+			__memo(() => import('./nodes/9.js')),
+			__memo(() => import('./nodes/10.js')),
+			__memo(() => import('./nodes/11.js'))
 		],
 		remotes: {
 			
@@ -28,7 +33,7 @@ return {
 				id: "/",
 				pattern: /^\/$/,
 				params: [],
-				page: { layouts: [0,], errors: [1,], leaf: 2 },
+				page: { layouts: [0,], errors: [1,], leaf: 3 },
 				endpoint: null
 			},
 			{
@@ -39,11 +44,74 @@ return {
 				endpoint: __memo(() => import('./entries/endpoints/api/auth/check/_server.ts.js'))
 			},
 			{
+				id: "/api/auth/logout",
+				pattern: /^\/api\/auth\/logout\/?$/,
+				params: [],
+				page: null,
+				endpoint: __memo(() => import('./entries/endpoints/api/auth/logout/_server.ts.js'))
+			},
+			{
+				id: "/api/auth/magic-link",
+				pattern: /^\/api\/auth\/magic-link\/?$/,
+				params: [],
+				page: null,
+				endpoint: __memo(() => import('./entries/endpoints/api/auth/magic-link/_server.ts.js'))
+			},
+			{
+				id: "/api/auth/magic-verify",
+				pattern: /^\/api\/auth\/magic-verify\/?$/,
+				params: [],
+				page: null,
+				endpoint: __memo(() => import('./entries/endpoints/api/auth/magic-verify/_server.ts.js'))
+			},
+			{
+				id: "/api/auth/me",
+				pattern: /^\/api\/auth\/me\/?$/,
+				params: [],
+				page: null,
+				endpoint: __memo(() => import('./entries/endpoints/api/auth/me/_server.ts.js'))
+			},
+			{
+				id: "/api/auth/passkeys",
+				pattern: /^\/api\/auth\/passkeys\/?$/,
+				params: [],
+				page: null,
+				endpoint: __memo(() => import('./entries/endpoints/api/auth/passkeys/_server.ts.js'))
+			},
+			{
+				id: "/api/auth/recovery",
+				pattern: /^\/api\/auth\/recovery\/?$/,
+				params: [],
+				page: null,
+				endpoint: __memo(() => import('./entries/endpoints/api/auth/recovery/_server.ts.js'))
+			},
+			{
 				id: "/api/auth/register",
 				pattern: /^\/api\/auth\/register\/?$/,
 				params: [],
 				page: null,
 				endpoint: __memo(() => import('./entries/endpoints/api/auth/register/_server.ts.js'))
+			},
+			{
+				id: "/api/health",
+				pattern: /^\/api\/health\/?$/,
+				params: [],
+				page: null,
+				endpoint: __memo(() => import('./entries/endpoints/api/health/_server.ts.js'))
+			},
+			{
+				id: "/api/spaces/[spaceId]/messages",
+				pattern: /^\/api\/spaces\/([^/]+?)\/messages\/?$/,
+				params: [{"name":"spaceId","optional":false,"rest":false,"chained":false}],
+				page: null,
+				endpoint: __memo(() => import('./entries/endpoints/api/spaces/_spaceId_/messages/_server.ts.js'))
+			},
+			{
+				id: "/api/spaces/[spaceId]/promises",
+				pattern: /^\/api\/spaces\/([^/]+?)\/promises\/?$/,
+				params: [{"name":"spaceId","optional":false,"rest":false,"chained":false}],
+				page: null,
+				endpoint: __memo(() => import('./entries/endpoints/api/spaces/_spaceId_/promises/_server.ts.js'))
 			},
 			{
 				id: "/api/webauthn/login/finish",
@@ -74,31 +142,59 @@ return {
 				endpoint: __memo(() => import('./entries/endpoints/api/webauthn/register/start/_server.ts.js'))
 			},
 			{
+				id: "/auth/magic",
+				pattern: /^\/auth\/magic\/?$/,
+				params: [],
+				page: { layouts: [0,], errors: [1,], leaf: 7 },
+				endpoint: null
+			},
+			{
 				id: "/enroll",
 				pattern: /^\/enroll\/?$/,
 				params: [],
-				page: { layouts: [0,], errors: [1,], leaf: 3 },
+				page: { layouts: [0,], errors: [1,], leaf: 8 },
 				endpoint: null
 			},
 			{
 				id: "/enter",
 				pattern: /^\/enter\/?$/,
 				params: [],
-				page: { layouts: [0,], errors: [1,], leaf: 4 },
+				page: { layouts: [0,], errors: [1,], leaf: 9 },
 				endpoint: null
 			},
 			{
-				id: "/spaces",
+				id: "/recovery",
+				pattern: /^\/recovery\/?$/,
+				params: [],
+				page: { layouts: [0,], errors: [1,], leaf: 10 },
+				endpoint: null
+			},
+			{
+				id: "/(app)/settings",
+				pattern: /^\/settings\/?$/,
+				params: [],
+				page: { layouts: [0,2,], errors: [1,,], leaf: 4 },
+				endpoint: null
+			},
+			{
+				id: "/(app)/spaces",
 				pattern: /^\/spaces\/?$/,
 				params: [],
-				page: { layouts: [0,], errors: [1,], leaf: 5 },
+				page: { layouts: [0,2,], errors: [1,,], leaf: 6 },
+				endpoint: null
+			},
+			{
+				id: "/(app)/space/[slug]",
+				pattern: /^\/space\/([^/]+?)\/?$/,
+				params: [{"name":"slug","optional":false,"rest":false,"chained":false}],
+				page: { layouts: [0,2,], errors: [1,,], leaf: 5 },
 				endpoint: null
 			},
 			{
 				id: "/verify",
 				pattern: /^\/verify\/?$/,
 				params: [],
-				page: { layouts: [0,], errors: [1,], leaf: 6 },
+				page: { layouts: [0,], errors: [1,], leaf: 11 },
 				endpoint: null
 			}
 		],

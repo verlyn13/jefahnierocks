@@ -1,4 +1,4 @@
-import { H as HYDRATION_ERROR, g as get_next_sibling, d as define_property, s as set_active_reaction, a as set_active_effect, i as is_array, b as active_effect, c as active_reaction, e as init_operations, f as get_first_child, C as COMMENT_NODE, h as HYDRATION_START, j as HYDRATION_END, k as hydration_failed, l as clear_text_content, m as array_from, n as component_root, o as create_text, p as branch, q as push, r as component_context, t as pop, u as set, L as LEGACY_PROPS, v as get, w as flushSync, x as mutable_source, y as render, z as push$1, A as setContext, B as pop$1 } from "./index2.js";
+import { H as HYDRATION_ERROR, g as get_next_sibling, d as define_property, s as set_active_reaction, a as set_active_effect, i as is_array, b as active_effect, c as active_reaction, e as init_operations, f as get_first_child, C as COMMENT_NODE, h as HYDRATION_START, j as HYDRATION_END, k as hydration_failed, l as clear_text_content, m as array_from, n as component_root, o as is_passive_event, p as create_text, q as branch, r as push, t as component_context, u as pop, v as set, L as LEGACY_PROPS, w as get, x as flushSync, y as mutable_source, z as render, A as push$1, B as setContext, D as pop$1 } from "./index2.js";
 import "clsx";
 import "./environment.js";
 import "./paths.js";
@@ -25,10 +25,6 @@ function hydrate_next() {
     /** @type {TemplateNode} */
     get_next_sibling(hydrate_node)
   );
-}
-const PASSIVE_EVENTS = ["touchstart", "touchmove"];
-function is_passive_event(name) {
-  return PASSIVE_EVENTS.includes(name);
 }
 const all_registered_events = /* @__PURE__ */ new Set();
 const root_event_handles = /* @__PURE__ */ new Set();
@@ -404,7 +400,8 @@ function Root($$payload, $$props) {
     components = [],
     form,
     data_0 = null,
-    data_1 = null
+    data_1 = null,
+    data_2 = null
   } = $$props;
   {
     setContext("__svelte__", stores);
@@ -412,7 +409,7 @@ function Root($$payload, $$props) {
   {
     stores.page.set(page);
   }
-  const Pyramid_1 = constructors[1];
+  const Pyramid_2 = constructors[2];
   if (constructors[1]) {
     $$payload.out.push("<!--[-->");
     const Pyramid_0 = constructors[0];
@@ -422,9 +419,30 @@ function Root($$payload, $$props) {
       form,
       params: page.params,
       children: ($$payload2) => {
-        $$payload2.out.push(`<!---->`);
-        Pyramid_1($$payload2, { data: data_1, form, params: page.params });
-        $$payload2.out.push(`<!---->`);
+        if (constructors[2]) {
+          $$payload2.out.push("<!--[-->");
+          const Pyramid_1 = constructors[1];
+          $$payload2.out.push(`<!---->`);
+          Pyramid_1($$payload2, {
+            data: data_1,
+            form,
+            params: page.params,
+            children: ($$payload3) => {
+              $$payload3.out.push(`<!---->`);
+              Pyramid_2($$payload3, { data: data_2, form, params: page.params });
+              $$payload3.out.push(`<!---->`);
+            },
+            $$slots: { default: true }
+          });
+          $$payload2.out.push(`<!---->`);
+        } else {
+          $$payload2.out.push("<!--[!-->");
+          const Pyramid_1 = constructors[1];
+          $$payload2.out.push(`<!---->`);
+          Pyramid_1($$payload2, { data: data_1, form, params: page.params });
+          $$payload2.out.push(`<!---->`);
+        }
+        $$payload2.out.push(`<!--]-->`);
       },
       $$slots: { default: true }
     });
@@ -530,7 +548,7 @@ const options = {
 		<div class="error">
 			<span class="status">` + status + '</span>\n			<div class="message">\n				<h1>' + message + "</h1>\n			</div>\n		</div>\n	</body>\n</html>\n"
   },
-  version_hash: "1c1h23"
+  version_hash: "95f0f1"
 };
 async function get_hooks() {
   let handle;

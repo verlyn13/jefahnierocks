@@ -1,21 +1,24 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
+  import type { PageData } from "./$types";
   
-  // Mock spaces for now - will be loaded from DB
-  const spaces = [
+  export let data: PageData;
+  
+  // Use spaces from database or fall back to defaults
+  $: spaces = data.spaces?.length > 0 ? data.spaces : [
     {
       id: "family",
       name: "Jefahnie Family",
       hue: 198,
-      activity: "2 threads warm • 1 promise due",
-      members: 5,
+      activity: "Setting up...",
+      members: 1,
       lastActive: true
     },
     {
       id: "projects",
       name: "Personal Projects",
       hue: 271,
-      activity: "3 nodes updated today",
+      activity: "Setting up...",
       members: 1,
       lastActive: false
     }
