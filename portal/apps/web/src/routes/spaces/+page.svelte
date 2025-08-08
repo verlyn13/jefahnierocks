@@ -39,7 +39,7 @@
       <div 
         class="absolute w-64 h-64 rounded-full blur-3xl opacity-20"
         style="background: hsl({space.hue}, 70%, 50%); left: {20 + i * 40}%; top: {30 + i * 20}%; animation: float {15 + i * 5}s ease-in-out infinite;"
-      />
+      ></div>
     {/each}
   </div>
   
@@ -82,7 +82,7 @@
             <div 
               class="w-12 h-12 rounded-full"
               style="background: linear-gradient(135deg, hsl({space.hue}, 70%, 50%), hsl({space.hue}, 50%, 30%))"
-            />
+            ></div>
           </div>
         </button>
       {/each}

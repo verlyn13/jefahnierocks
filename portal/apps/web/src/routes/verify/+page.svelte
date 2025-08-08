@@ -93,7 +93,7 @@
   <div 
     class="absolute w-96 h-96 rounded-full bg-aurora-500/20 blur-3xl pointer-events-none transition-all duration-1000"
     style="left: {glowX}%; top: {glowY}%; transform: translate(-50%, -50%)"
-  />
+  ></div>
   
   <!-- Auth card -->
   <div class="relative z-10 w-full max-w-md p-8 bg-black/40 backdrop-blur-xl rounded-3xl border border-white/10">

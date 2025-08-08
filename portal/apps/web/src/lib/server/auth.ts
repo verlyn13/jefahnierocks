@@ -1,12 +1,9 @@
 import { Lucia } from "lucia";
-import { BetterSqlite3Adapter } from "@lucia-auth/adapter-sqlite";
+import { LibsqlAdapter } from "./lucia-libsql-adapter";
 import db from "./db";
 import type { RequestEvent } from "@sveltejs/kit";
 
-const adapter = new BetterSqlite3Adapter(db, {
-  user: "user",
-  session: "session"
-});
+const adapter = new LibsqlAdapter(db);
 
 export const lucia = new Lucia(adapter, {
   sessionCookie: {
@@ -39,21 +36,45 @@ interface DatabaseUserAttributes {
 
 export async function createUser(email: string, name?: string) {
   const userId = crypto.randomUUID();
-  const stmt = db.prepare(
-    "INSERT INTO user (id, email, name) VALUES (?, ?, ?)"
-  );
-  stmt.run(userId, email, name || email.split("@")[0]);
+  await db.execute({
+    sql: "INSERT INTO user (id, email, name) VALUES (?, ?, ?)",
+    args: [userId, email, name || email.split("@")[0]]
+  });
   return userId;
 }
 
 export async function getUserByEmail(email: string) {
-  const stmt = db.prepare("SELECT * FROM user WHERE email = ?");
-  return stmt.get(email) as DatabaseUserAttributes & { id: string } | undefined;
+  const result = await db.execute({
+    sql: "SELECT * FROM user WHERE email = ?",
+    args: [email]
+  });
+  
+  if (result.rows.length === 0) return undefined;
+  
+  const row = result.rows[0];
+  return {
+    id: row.id as string,
+    email: row.email as string,
+    name: row.name as string | null,
+    avatar_url: row.avatar_url as string | null
+  };
 }
 
 export async function getUserById(id: string) {
-  const stmt = db.prepare("SELECT * FROM user WHERE id = ?");
-  return stmt.get(id) as DatabaseUserAttributes & { id: string } | undefined;
+  const result = await db.execute({
+    sql: "SELECT * FROM user WHERE id = ?",
+    args: [id]
+  });
+  
+  if (result.rows.length === 0) return undefined;
+  
+  const row = result.rows[0];
+  return {
+    id: row.id as string,
+    email: row.email as string,
+    name: row.name as string | null,
+    avatar_url: row.avatar_url as string | null
+  };
 }
 
 export async function setSession(event: RequestEvent, userId: string) {

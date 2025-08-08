@@ -31,12 +31,11 @@
     "vitest": "^2.1.0"
   },
   "dependencies": {
-    "@lucia-auth/adapter-sqlite": "^3.0.2",
+    "@libsql/client": "^0.15.10",
     "@portal/types": "workspace:*",
     "@simplewebauthn/browser": "^13.1.2",
     "@simplewebauthn/server": "^13.1.2",
     "argon2": "^0.43.1",
-    "better-sqlite3": "^12.2.0",
     "bits-ui": "^2.9.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

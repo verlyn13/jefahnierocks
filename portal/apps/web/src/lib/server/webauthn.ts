@@ -20,17 +20,22 @@ const RP_ID = "localhost"; // Change to your domain in production
 const ORIGIN = "http://localhost:5173"; // Change to your URL in production
 
 export async function generateRegistrationChallenge(userId: string, email: string) {
-  const user = db.prepare("SELECT * FROM user WHERE id = ?").get(userId);
-  if (!user) throw new Error("User not found");
+  const userResult = await db.execute({
+    sql: "SELECT * FROM user WHERE id = ?",
+    args: [userId]
+  });
   
-  const userCredentials = db.prepare(
-    "SELECT credential_id, transports FROM credential WHERE user_id = ?"
-  ).all(userId) as Array<{ credential_id: string; transports: string }>;
+  if (userResult.rows.length === 0) throw new Error("User not found");
   
-  const excludeCredentials = userCredentials.map(cred => ({
-    id: cred.credential_id,
+  const credentialsResult = await db.execute({
+    sql: "SELECT credential_id, transports FROM credential WHERE user_id = ?",
+    args: [userId]
+  });
+  
+  const excludeCredentials = credentialsResult.rows.map(cred => ({
+    id: cred.credential_id as string,
     type: "public-key" as const,
-    transports: cred.transports ? JSON.parse(cred.transports) : undefined
+    transports: cred.transports ? JSON.parse(cred.transports as string) : undefined
   }));
   
   const options = await generateRegistrationOptions({
@@ -49,9 +54,10 @@ export async function generateRegistrationChallenge(userId: string, email: strin
   
   // Store challenge
   const challengeId = nanoid();
-  db.prepare(
-    "INSERT INTO auth_challenge (id, user_id, challenge, type, expires_at) VALUES (?, ?, ?, ?, ?)"
-  ).run(challengeId, userId, options.challenge, "register", Date.now() + 60000);
+  await db.execute({
+    sql: "INSERT INTO auth_challenge (id, user_id, challenge, type, expires_at) VALUES (?, ?, ?, ?, ?)",
+    args: [challengeId, userId, options.challenge, "register", Date.now() + 60000]
+  });
   
   return options;
 }
@@ -61,15 +67,18 @@ export async function verifyRegistration(
   response: RegistrationResponseJSON
 ): Promise<VerifiedRegistrationResponse> {
   // Get stored challenge
-  const challenge = db.prepare(
-    "SELECT challenge FROM auth_challenge WHERE user_id = ? AND type = ? AND expires_at > ? ORDER BY created_at DESC LIMIT 1"
-  ).get(userId, "register", Date.now()) as { challenge: string } | undefined;
+  const challengeResult = await db.execute({
+    sql: "SELECT challenge FROM auth_challenge WHERE user_id = ? AND type = ? AND expires_at > ? ORDER BY created_at DESC LIMIT 1",
+    args: [userId, "register", Date.now()]
+  });
   
-  if (!challenge) throw new Error("Challenge not found or expired");
+  if (challengeResult.rows.length === 0) throw new Error("Challenge not found or expired");
+  
+  const challenge = challengeResult.rows[0].challenge as string;
   
   const verification = await verifyRegistrationResponse({
     response,
-    expectedChallenge: challenge.challenge,
+    expectedChallenge: challenge,
     expectedOrigin: ORIGIN,
     expectedRPID: RP_ID
   });
@@ -78,40 +87,51 @@ export async function verifyRegistration(
     const { credentialPublicKey, credentialID, counter } = verification.registrationInfo;
     
     // Store credential
-    db.prepare(
-      "INSERT INTO credential (id, user_id, public_key, credential_id, counter, transports) VALUES (?, ?, ?, ?, ?, ?)"
-    ).run(
-      nanoid(),
-      userId,
-      Buffer.from(credentialPublicKey).toString("base64"),
-      Buffer.from(credentialID).toString("base64"),
-      counter,
-      JSON.stringify(response.response.transports || [])
-    );
+    await db.execute({
+      sql: "INSERT INTO credential (id, user_id, public_key, credential_id, counter, transports) VALUES (?, ?, ?, ?, ?, ?)",
+      args: [
+        nanoid(),
+        userId,
+        Buffer.from(credentialPublicKey).toString("base64"),
+        Buffer.from(credentialID).toString("base64"),
+        counter,
+        JSON.stringify(response.response.transports || [])
+      ]
+    });
     
     // Clean up challenge
-    db.prepare("DELETE FROM auth_challenge WHERE user_id = ? AND type = ?").run(userId, "register");
+    await db.execute({
+      sql: "DELETE FROM auth_challenge WHERE user_id = ? AND type = ?",
+      args: [userId, "register"]
+    });
   }
   
   return verification;
 }
 
 export async function generateAuthenticationChallenge(email: string) {
-  const user = db.prepare("SELECT id FROM user WHERE email = ?").get(email) as { id: string } | undefined;
-  if (!user) throw new Error("User not found");
+  const userResult = await db.execute({
+    sql: "SELECT id FROM user WHERE email = ?",
+    args: [email]
+  });
   
-  const userCredentials = db.prepare(
-    "SELECT credential_id, transports FROM credential WHERE user_id = ?"
-  ).all(user.id) as Array<{ credential_id: string; transports: string }>;
+  if (userResult.rows.length === 0) throw new Error("User not found");
   
-  if (userCredentials.length === 0) {
+  const userId = userResult.rows[0].id as string;
+  
+  const credentialsResult = await db.execute({
+    sql: "SELECT credential_id, transports FROM credential WHERE user_id = ?",
+    args: [userId]
+  });
+  
+  if (credentialsResult.rows.length === 0) {
     throw new Error("No credentials found");
   }
   
-  const allowCredentials = userCredentials.map(cred => ({
-    id: Buffer.from(cred.credential_id, "base64"),
+  const allowCredentials = credentialsResult.rows.map(cred => ({
+    id: Buffer.from(cred.credential_id as string, "base64"),
     type: "public-key" as const,
-    transports: cred.transports ? JSON.parse(cred.transports) : undefined
+    transports: cred.transports ? JSON.parse(cred.transports as string) : undefined
   }));
   
   const options = await generateAuthenticationOptions({
@@ -122,9 +142,10 @@ export async function generateAuthenticationChallenge(email: string) {
   
   // Store challenge
   const challengeId = nanoid();
-  db.prepare(
-    "INSERT INTO auth_challenge (id, email, challenge, type, expires_at) VALUES (?, ?, ?, ?, ?)"
-  ).run(challengeId, email, options.challenge, "login", Date.now() + 60000);
+  await db.execute({
+    sql: "INSERT INTO auth_challenge (id, email, challenge, type, expires_at) VALUES (?, ?, ?, ?, ?)",
+    args: [challengeId, email, options.challenge, "login", Date.now() + 60000]
+  });
   
   return options;
 }
@@ -133,45 +154,61 @@ export async function verifyAuthentication(
   email: string,
   response: AuthenticationResponseJSON
 ): Promise<{ verified: boolean; userId?: string }> {
-  const user = db.prepare("SELECT id FROM user WHERE email = ?").get(email) as { id: string } | undefined;
-  if (!user) throw new Error("User not found");
+  const userResult = await db.execute({
+    sql: "SELECT id FROM user WHERE email = ?",
+    args: [email]
+  });
+  
+  if (userResult.rows.length === 0) throw new Error("User not found");
+  
+  const userId = userResult.rows[0].id as string;
   
   // Get stored challenge
-  const challenge = db.prepare(
-    "SELECT challenge FROM auth_challenge WHERE email = ? AND type = ? AND expires_at > ? ORDER BY created_at DESC LIMIT 1"
-  ).get(email, "login", Date.now()) as { challenge: string } | undefined;
+  const challengeResult = await db.execute({
+    sql: "SELECT challenge FROM auth_challenge WHERE email = ? AND type = ? AND expires_at > ? ORDER BY created_at DESC LIMIT 1",
+    args: [email, "login", Date.now()]
+  });
   
-  if (!challenge) throw new Error("Challenge not found or expired");
+  if (challengeResult.rows.length === 0) throw new Error("Challenge not found or expired");
+  
+  const challenge = challengeResult.rows[0].challenge as string;
   
   // Get credential
-  const credential = db.prepare(
-    "SELECT public_key, counter FROM credential WHERE credential_id = ? AND user_id = ?"
-  ).get(response.id, user.id) as { public_key: string; counter: number } | undefined;
+  const credentialResult = await db.execute({
+    sql: "SELECT public_key, counter FROM credential WHERE credential_id = ? AND user_id = ?",
+    args: [response.id, userId]
+  });
   
-  if (!credential) throw new Error("Credential not found");
+  if (credentialResult.rows.length === 0) throw new Error("Credential not found");
+  
+  const credential = credentialResult.rows[0];
   
   const verification = await verifyAuthenticationResponse({
     response,
-    expectedChallenge: challenge.challenge,
+    expectedChallenge: challenge,
     expectedOrigin: ORIGIN,
     expectedRPID: RP_ID,
     authenticator: {
-      credentialPublicKey: Buffer.from(credential.public_key, "base64"),
+      credentialPublicKey: Buffer.from(credential.public_key as string, "base64"),
       credentialID: Buffer.from(response.id, "base64"),
-      counter: credential.counter
+      counter: credential.counter as number
     }
   });
   
   if (verification.verified) {
     // Update counter
-    db.prepare(
-      "UPDATE credential SET counter = ? WHERE credential_id = ?"
-    ).run(verification.authenticationInfo.newCounter, response.id);
+    await db.execute({
+      sql: "UPDATE credential SET counter = ? WHERE credential_id = ?",
+      args: [verification.authenticationInfo.newCounter, response.id]
+    });
     
     // Clean up challenge
-    db.prepare("DELETE FROM auth_challenge WHERE email = ? AND type = ?").run(email, "login");
+    await db.execute({
+      sql: "DELETE FROM auth_challenge WHERE email = ? AND type = ?",
+      args: [email, "login"]
+    });
     
-    return { verified: true, userId: user.id };
+    return { verified: true, userId };
   }
   
   return { verified: false };

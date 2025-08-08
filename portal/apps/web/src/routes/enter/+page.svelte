@@ -75,7 +75,7 @@
     <div 
       class="absolute w-2 h-2 bg-aurora-500 rounded-full blur-sm animate-pulse"
       style="left: {particle.x}%; top: {particle.y}%; transform: translate(-50%, -50%)"
-    />
+    ></div>
   {/each}
   
   <!-- Auth card -->
