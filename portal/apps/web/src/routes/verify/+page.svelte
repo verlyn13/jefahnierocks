@@ -34,7 +34,11 @@
       });
       
       if (!optionsRes.ok) {
-        throw new Error("Failed to get authentication options");
+        const data = await optionsRes.json();
+        if (data.error === "No credentials found") {
+          throw new Error("No passkey found. Please use magic link or register a new passkey.");
+        }
+        throw new Error(data.error || "Failed to get authentication options");
       }
       
       const options = await optionsRes.json();
@@ -84,14 +88,24 @@
       });
       
       if (!res.ok) {
-        throw new Error("Failed to send magic link");
+        const data = await res.json();
+        throw new Error(data.error || "Failed to send magic link");
       }
+      
+      const data = await res.json();
       
       // Show success message
       error = ""; // Clear any errors
-      alert("Check your email for a sign-in link!");
-    } catch (e) {
-      error = "Failed to send magic link. Please try again.";
+      
+      // In dev/test, show the link
+      if (data.link) {
+        console.log("Magic link:", data.link);
+        alert(`Magic link sent! (Dev mode - check console for link)`);
+      } else {
+        alert("Check your email for a sign-in link!");
+      }
+    } catch (e: any) {
+      error = e.message || "Failed to send magic link. Please try again.";
     } finally {
       loading = false;
     }
